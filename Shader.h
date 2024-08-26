@@ -18,6 +18,8 @@ public:
 	// Returns a GLuint representing a glShaderProgram
 	GLuint GetShaderProgram();
 
+	void Use();
+
 private:
 	std::string VertexShaderPath;
 	std::string FragmentShaderPath;

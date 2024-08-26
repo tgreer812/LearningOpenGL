@@ -35,3 +35,7 @@ Shader::~Shader() {
 GLuint Shader::GetShaderProgram() {
 	return this->ShaderProgram;
 }
+
+void Shader::Use() {
+	glUseProgram(this->ShaderProgram);
+}

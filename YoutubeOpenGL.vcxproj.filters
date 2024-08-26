@@ -41,7 +41,15 @@
     <None Include="FragmentShader.glsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="FragmentShader2.glsl" />
+    <None Include="FragmentShaderUniform.glsl">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="FragmentShader2.glsl">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="FragmentShaderInputColor.glsl">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">

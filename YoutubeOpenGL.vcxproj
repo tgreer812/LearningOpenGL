@@ -160,7 +160,9 @@
   <ItemGroup>
     <None Include="FragmentShader.glsl" />
     <None Include="FragmentShader2.glsl" />
+    <None Include="FragmentShaderInputColor.glsl" />
     <None Include="VertexShader.glsl" />
+    <None Include="FragmentShaderUniform.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h" />
