@@ -156,6 +156,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FragmentShader.glsl" />
@@ -165,8 +166,13 @@
     <None Include="FragmentShaderUniform.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="VertexArray.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="YoutubeOpenGL.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
