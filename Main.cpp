@@ -6,6 +6,7 @@
 #include "Utils.h"
 #include "Shader.h"
 #include "VertexArray.h"
+#include "Texture2D.h"
 
 bool wireframe = false;
 
@@ -65,20 +66,26 @@ int main()
 	init();
 
 	// Load shaders
-	std::string vertexShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\VertexShader.glsl";
-	std::string inputColorFragmentShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\FragmentShaderInputColor.glsl";
-	Shader InputColorShader = Shader(vertexShaderSource, inputColorFragmentShaderSource);
+	std::string vertexShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\VertexShader.glsl";
+	std::string inputColorFragmentShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FragmentShaderInputColor.glsl";
+	std::string textureShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FragmentTextureShader.glsl";
+	//Shader InputColorShader = Shader(vertexShaderSource, inputColorFragmentShaderSource);
+	Shader TextureShader = Shader(vertexShaderSource, textureShaderSource);
+
+	Texture2D testTexture = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FlatMarbleTexture.png");
 
 	// Define vertices and indices
 	float vertices[] = {
-		// Positions         // Colors (RGB)
-		-0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // Vertex 1: Red
-		 0.0f,  0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // Vertex 2: Green
-		 0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // Vertex 3: Blue
+		// positions		// colors			// texture coords
+		0.5f, 0.5f, 0.0f,	1.0f, 0.0f, 0.0f,	1.0f, 1.0f,		// top right
+		0.5f, -0.5f, 0.0f,	0.0f, 1.0f, 0.0f,	1.0f, 0.0f,		// bottom right
+		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,	0.0f, 0.0f,		// bottom left
+		-0.5f, 0.5f, 0.0f,	1.0f, 1.0f, 0.0f,	0.0f, 1.0f		// top left
 	};
 
 	unsigned int indices[] = {
-		0, 1, 2  // Triangle
+		0, 1, 2,	// Triangle 1
+		0, 2, 3		// Triangle 2
 	};
 
 	// Create the vertex array object with the correct number of elements (not bytes)
@@ -91,13 +98,17 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Use the shader program
-		InputColorShader.Use();
+		TextureShader.Use();
+
+		// Bind the texture and set the texture uniform
+		testTexture.Bind();
+		TextureShader.setInt("ourTexture", 0); // 0 corresponds to GL_TEXTURE0
 
 		// Bind the vertex array object
 		va.Use();
 
-		// Draw the triangle
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+		// Draw the rectangle
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		// Swap buffers and poll events
 		glfwSwapBuffers(Window);

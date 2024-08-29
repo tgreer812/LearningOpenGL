@@ -16,6 +16,9 @@
     <Filter Include="Resource Files\Shaders">
       <UniqueIdentifier>{727da8d7-7d13-4e55-9291-dbee2cdc1efa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Textures">
+      <UniqueIdentifier>{db292ed7-0c96-49a2-a0d3-57c51ee5c6c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -36,21 +39,27 @@
     <ClCompile Include="VertexArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Texture2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="VertexShader.glsl">
+    <None Include="Resources\VertexShader.glsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="FragmentShader.glsl">
+    <None Include="Resources\FragmentShader.glsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="FragmentShaderUniform.glsl">
+    <None Include="Resources\FragmentShaderUniform.glsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="FragmentShader2.glsl">
+    <None Include="Resources\FragmentShader2.glsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="FragmentShaderInputColor.glsl">
+    <None Include="Resources\FragmentShaderInputColor.glsl">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="Resources\FragmentTextureShader.glsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>
@@ -67,5 +76,16 @@
     <ClInclude Include="VertexArray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\FlatMarbleTexture.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
   </ItemGroup>
 </Project>

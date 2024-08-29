@@ -46,7 +46,7 @@ void VertexArray::Use() {
 		3,                   // Size (3 components per vertex)
 		GL_FLOAT,            // Type (float)
 		GL_FALSE,            // Don't normalize
-		6 * sizeof(float),   // Stride (each vertex has 6 floats: 3 for position, 3 for color)
+		8 * sizeof(float),   // Stride (each vertex has 6 floats: 3 for position, 3 for color)
 		(void*)0             // Offset to the first component (position starts at 0)
 	);
 	glEnableVertexAttribArray(0);
@@ -57,9 +57,20 @@ void VertexArray::Use() {
 		3,                               // Size (3 components per vertex)
 		GL_FLOAT,                        // Type (float)
 		GL_FALSE,                        // Don't normalize
-		6 * sizeof(float),               // Stride (each vertex has 6 floats)
+		8 * sizeof(float),               // Stride (each vertex has 6 floats)
 		(void*)(3 * sizeof(float))       // Offset (color starts after the first 3 floats for position)
 	);
 	glEnableVertexAttribArray(1);
+
+	// Texture attribute
+	glVertexAttribPointer(
+		2,
+		2,
+		GL_FLOAT,
+		GL_FALSE,
+		8 * sizeof(float),
+		(void*)(6 * sizeof(float))
+	);
+	glEnableVertexAttribArray(2);
 }
 

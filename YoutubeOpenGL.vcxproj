@@ -155,21 +155,28 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="FragmentShader.glsl" />
-    <None Include="FragmentShader2.glsl" />
-    <None Include="FragmentShaderInputColor.glsl" />
-    <None Include="VertexShader.glsl" />
-    <None Include="FragmentShaderUniform.glsl" />
+    <None Include="Resources\FragmentShader.glsl" />
+    <None Include="Resources\FragmentShader2.glsl" />
+    <None Include="Resources\FragmentShaderInputColor.glsl" />
+    <None Include="Resources\FragmentTextureShader.glsl" />
+    <None Include="Resources\VertexShader.glsl" />
+    <None Include="Resources\FragmentShaderUniform.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Texture2D.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VertexArray.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\FlatMarbleTexture.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
