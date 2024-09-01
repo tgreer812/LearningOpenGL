@@ -42,13 +42,26 @@ void Shader::Use() {
 
 void Shader::setBool(const std::string& name, bool value) const
 {
+	// Yes this is correct. Opengl booleans are 32 bits so it's just an int
 	glUniform1i(glGetUniformLocation(this->ShaderProgram, name.c_str()), (int)value);
 }
+
 void Shader::setInt(const std::string& name, int value) const
 {
 	glUniform1i(glGetUniformLocation(this->ShaderProgram, name.c_str()), value);
 }
+
 void Shader::setFloat(const std::string& name, float value) const
 {
 	glUniform1f(glGetUniformLocation(this->ShaderProgram, name.c_str()), value);
+}
+
+void Shader::setMatrix4(const std::string& name, glm::mat4 value) {
+	// stands for 4x4 matrix float vector
+	glUniformMatrix4fv(
+		glGetUniformLocation(this->ShaderProgram, name.c_str()),
+		1,
+		GL_FALSE,
+		glm::value_ptr(value)
+	);
 }

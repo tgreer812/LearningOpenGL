@@ -2,6 +2,8 @@
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
+#include "glm/glm.hpp"
+#include "glm/ext.hpp"
 
 #include "Utils.h"
 #include "Shader.h"
@@ -25,6 +27,8 @@ void toggleWireframe(GLFWwindow* window, int key, int scancode, int action, int 
 }
 
 GLFWwindow* Window;
+int windowHeight = 800;
+int windowWidth = 800;
 
 void init() {
 	glfwInit();
@@ -38,7 +42,7 @@ void init() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Create a window to draw on
-	Window = glfwCreateWindow(800, 800, "mytriangle", NULL, NULL);
+	Window = glfwCreateWindow(windowHeight, windowWidth, "mytriangle", NULL, NULL);
 	if (Window == NULL) {
 		std::cout << "Failed to create window!\n";
 		glfwTerminate();
@@ -75,7 +79,7 @@ int main()
 	Texture2D testTexture = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FlatMarbleTexture.png");
 
 	// Define vertices and indices
-	float vertices[] = {
+	float plane_vertices[] = {
 		// positions		// colors			// texture coords
 		0.5f, 0.5f, 0.0f,	1.0f, 0.0f, 0.0f,	1.0f, 1.0f,		// top right
 		0.5f, -0.5f, 0.0f,	0.0f, 1.0f, 0.0f,	1.0f, 0.0f,		// bottom right
@@ -88,8 +92,22 @@ int main()
 		0, 2, 3		// Triangle 2
 	};
 
+	glm::mat4 model_matrix = glm::mat4(1.0f);
+	constexpr float model_rotation = glm::radians(-55.0f);
+	model_matrix = glm::rotate(model_matrix, model_rotation, glm::vec3(1.0f, 0.0f, 0.0f));
+
+	glm::mat4 view_matrix = glm::mat4(1.0f);
+	float view_distance = -3.0f;
+	view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, view_distance));
+
+	glm::mat4 projection_matrix;
+	constexpr float fov = glm::radians(60.0f);
+	projection_matrix = glm::perspective(fov, float(windowHeight) / float(windowWidth), 0.1f, 100.0f);
+
+	
+
 	// Create the vertex array object with the correct number of elements (not bytes)
-	VertexArray va = VertexArray(vertices, sizeof(vertices), indices, sizeof(indices));
+	VertexArray va = VertexArray(plane_vertices, sizeof(plane_vertices), indices, sizeof(indices));
 
 	// Graphics loop
 	while (!glfwWindowShouldClose(Window)) {
@@ -97,6 +115,12 @@ int main()
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		constexpr float model_rotation = glm::radians(-1.0f);
+		model_matrix = glm::rotate(model_matrix, model_rotation, glm::vec3(1.0f, 0.0f, 0.0f));
+
+		TextureShader.setMatrix4("modelMatrix", model_matrix);
+		TextureShader.setMatrix4("viewMatrix", view_matrix);
+		TextureShader.setMatrix4("projectionMatrix", projection_matrix);
 		// Use the shader program
 		TextureShader.Use();
 
