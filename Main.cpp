@@ -32,6 +32,9 @@ void toggleWireframeHandler(GLFWwindow* window, int key, int scancode, int actio
 // but for now we are going to do it the gross way of just using a global
 Camera* activeCamera = nullptr;
 
+float deltaTime = 0.0f;
+float lastFrameTime = 0.0f;
+
 void handleMovementInput(int key, int scancode, int action, int mods) {
 	
 	//temporary
@@ -43,18 +46,31 @@ void handleMovementInput(int key, int scancode, int action, int mods) {
 	//glm::mat3 movement
 	switch (key) {
 		case GLFW_KEY_W:
-			activeCamera->Move(glm::vec3(0.0f, 0.0f, 1.0f));
+			activeCamera->Move(glm::vec3(0.0f, 0.0f, 1.0f), deltaTime);
 			break;
 		case GLFW_KEY_A:
-			activeCamera->Move(glm::vec3(1.0f, 0.0f, 0.0f));
+			activeCamera->Move(glm::vec3(1.0f, 0.0f, 0.0f), deltaTime);
 			break;
 		case GLFW_KEY_S:
-			activeCamera->Move(glm::vec3(0.0f, 0.0f, -1.0f));
+			activeCamera->Move(glm::vec3(0.0f, 0.0f, -1.0f), deltaTime);
 			break;
 		case GLFW_KEY_D:
-			activeCamera->Move(glm::vec3(-1.0f, 0.0f, 0.0f));
+			activeCamera->Move(glm::vec3(-1.0f, 0.0f, 0.0f), deltaTime);
 			break;
 	}
+}
+
+float lastXPos = 0.0f;
+float lastYPos = 0.0f;
+bool first = true;
+
+void handleMouseEvent(GLFWwindow* window, double xpos, double ypos) {
+	if (first) { lastXPos = xpos; lastYPos = ypos; first = false; return; }
+
+	std::cout << "Rotating camera - x:" << xpos << " y:" << ypos << std::endl;
+	activeCamera->Rotate(xpos - lastXPos, ypos - lastYPos);
+	lastXPos = xpos;
+	lastYPos = ypos;
 }
 
 // temporary way of handling events
@@ -110,7 +126,12 @@ void init() {
 	// create a viewport
 	glad_glViewport(0, 0, 800, 800);
 
+	// Handle key presses
 	glfwSetKeyCallback(Window, handleKeyEvent);
+
+	// Handle mouse movement
+	glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetCursorPosCallback(Window, handleMouseEvent);
 }
 
 int main()
@@ -175,6 +196,10 @@ int main()
 		// Swap buffers and poll events
 		glfwSwapBuffers(Window);
 		glfwPollEvents();
+
+		float currentFrameTime = glfwGetTime();
+		deltaTime = currentFrameTime - lastFrameTime;
+		lastFrameTime = currentFrameTime;
 	}
 
 	// Cleanup/exit

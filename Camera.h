@@ -11,8 +11,8 @@ public:
 	Camera(glm::vec3 position);
 	Camera(glm::vec3 position, glm::vec3 orientation);
 
-	void Move(glm::vec3 translation);
-	void Rotate(glm::vec3 rotation);
+	void Move(glm::vec3 translation, float deltaTime);
+	void Rotate(float xoffset, float yoffset);
 	void SetAspectRatio(float aspectRatio);
 	void SetViewDistance(float viewDistance);
 
@@ -21,13 +21,19 @@ public:
 	glm::mat4 GetProjectionMatrix();
 
 	glm::vec3 m_position;
-	//glm::vec3 m_orientation;
 
 private:
 	float m_fov;
 	float m_viewDistance;
 	float m_aspectRatio = 1.0f;
-	float m_scalingFactor = 0.1f;
+	float m_cameraSpeed = 5.0f;
+	float m_lookSensitivity;
+
+	float m_yaw = 0.0f;		// yaw is the degrees of rotation about the y axis 
+							//		(if it were an airplane, think about how much it's turning on the sides)
+	float m_pitch = 0.0f;	// pitch is the degrees of rotation about the x axis
+
+	//float m_roll;	// not implemented
 
 	glm::vec3 m_targetPoint;
 	glm::vec3 m_cameraDirection;
