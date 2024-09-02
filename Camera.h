@@ -21,12 +21,18 @@ public:
 	glm::mat4 GetProjectionMatrix();
 
 	glm::vec3 m_position;
-	glm::vec3 m_orientation;
+	//glm::vec3 m_orientation;
 
 private:
 	float m_fov;
 	float m_viewDistance;
-	float m_aspectRatio = 1.0;
+	float m_aspectRatio = 1.0f;
+	float m_scalingFactor = 0.1f;
+
+	glm::vec3 m_targetPoint;
+	glm::vec3 m_cameraDirection;
+	glm::vec3 m_cameraUp;
+	glm::vec3 m_cameraRight;
 
 	glm::mat4 m_modelMatrix;
 	glm::mat4 m_viewMatrix;

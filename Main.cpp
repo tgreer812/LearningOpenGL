@@ -36,7 +36,6 @@ void handleMovementInput(int key, int scancode, int action, int mods) {
 	
 	//temporary
 	if (activeCamera == nullptr) { std::cout << "No camera set!\n";  return; }
-	
 
 	// Only process key down events
 	if (!(action == GLFW_PRESS || action == GLFW_REPEAT)) { return; }
@@ -140,18 +139,6 @@ int main()
 		0, 1, 2,	// Triangle 1
 		0, 2, 3		// Triangle 2
 	};
-
-	/*glm::mat4 model_matrix = glm::mat4(1.0f);
-	constexpr float model_rotation = glm::radians(-55.0f);
-	model_matrix = glm::rotate(model_matrix, model_rotation, glm::vec3(1.0f, 0.0f, 0.0f));
-
-	glm::mat4 view_matrix = glm::mat4(1.0f);
-	float view_distance = -3.0f;
-	view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, view_distance));
-
-	glm::mat4 projection_matrix;
-	constexpr float fov = glm::radians(60.0f);
-	projection_matrix = glm::perspective(fov, float(windowHeight) / float(windowWidth), 0.1f, 100.0f);*/
 
 	Camera camera = Camera();
 	activeCamera = &camera;

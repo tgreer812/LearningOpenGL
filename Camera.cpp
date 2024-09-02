@@ -1,7 +1,7 @@
 #include "Camera.h"
 #include <iostream>
 
-Camera::Camera() : Camera(glm::vec3(0.0, 0.0, 0.0)) {}
+Camera::Camera() : Camera(glm::vec3(0.0f, 0.0f, -3.0f)) {}
 
 Camera::Camera(glm::vec3 position)
 {
@@ -10,15 +10,31 @@ Camera::Camera(glm::vec3 position)
 	this->m_fov = glm::radians(60.0f);
 	this->m_viewDistance = -3.0f;
 
+	// Have the camera 'look towards' the origin of the world
+	this->m_targetPoint = glm::vec3(0.0f, 0.0f, 0.0f);
+
+	// The direction vector represents where the camera is looking. We can
+	// calculate this by subtracting the vector representing the camera's current position
+	// from the 'point' it's looking at
+	this->m_cameraDirection = glm::normalize(this->m_position - this->m_targetPoint);
+
+	// camera starts 'flat' so the up vector literally just points towards positive y
+	// so we can initialize it (0.0f, 1.0f, 0.0f)
+	this->m_cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+	// The right vector is the cross product of the up vector and the direction vector
+	this->m_cameraRight = glm::normalize(glm::cross(this->m_cameraUp, this->m_cameraDirection));
+	
 	_calculateModelMatrix();
 	_calculateViewMatrix();
 	_calculateProjectionMatrix();
 }
 
+// TODO: it's possible over time the floats will drift because of fp inaccuracy from what I've read
+// if that starts to happen try normalizing/rounding them back to fix it
 void Camera::Move(glm::vec3 translation) {
-	this->m_position += translation;
+	this->m_position += translation * this->m_scalingFactor;
 	std::cout << "Camera position: " << this->m_position.x << ", " << this->m_position.y << ", " << this->m_position.z << std::endl;
-
 }
 
 void Camera::SetAspectRatio(float aspectRatio) {
