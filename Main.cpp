@@ -9,10 +9,12 @@
 #include "Shader.h"
 #include "VertexArray.h"
 #include "Texture2D.h"
+#include "Camera.h"
 
 bool wireframe = false;
 
-void toggleWireframe(GLFWwindow* window, int key, int scancode, int action, int mods) {
+void toggleWireframeHandler(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	
 	if (key != GLFW_KEY_X) { return; }
 	if (action != GLFW_RELEASE) { return; }
 
@@ -24,6 +26,52 @@ void toggleWireframe(GLFWwindow* window, int key, int scancode, int action, int 
 	}
 
 	wireframe = !wireframe;
+}
+
+// To do this properly we need to implement an event system (i.e pub/sub pattern)
+// but for now we are going to do it the gross way of just using a global
+Camera* activeCamera = nullptr;
+
+void handleMovementInput(int key, int scancode, int action, int mods) {
+	
+	//temporary
+	if (activeCamera == nullptr) { std::cout << "No camera set!\n";  return; }
+	
+
+	// Only process key down events
+	if (!(action == GLFW_PRESS || action == GLFW_REPEAT)) { return; }
+
+	//glm::mat3 movement
+	switch (key) {
+		case GLFW_KEY_W:
+			std::cout << "working" << std::endl;
+			activeCamera->Move(glm::vec3(0.0f, 0.0f, 1.0f));
+			break;
+		case GLFW_KEY_A:
+			break;
+		case GLFW_KEY_S:
+			break;
+		case GLFW_KEY_D:
+			activeCamera->Move(glm::vec3(0.0f, 0.0f, -1.0f));
+			break;
+	}
+}
+
+// temporary way of handling events
+void handleKeyEvent(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	switch (key) {
+		case GLFW_KEY_X:
+			toggleWireframeHandler(window, key, scancode, action, mods);
+			break;
+		case GLFW_KEY_W:
+		case GLFW_KEY_A:
+		case GLFW_KEY_S:
+		case GLFW_KEY_D:
+			handleMovementInput(key, scancode, action, mods);
+			break;
+		default:
+			break;
+	}
 }
 
 GLFWwindow* Window;
@@ -62,7 +110,7 @@ void init() {
 	// create a viewport
 	glad_glViewport(0, 0, 800, 800);
 
-	glfwSetKeyCallback(Window, toggleWireframe);
+	glfwSetKeyCallback(Window, handleKeyEvent);
 }
 
 int main()
@@ -73,7 +121,7 @@ int main()
 	std::string vertexShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\VertexShader.glsl";
 	std::string inputColorFragmentShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FragmentShaderInputColor.glsl";
 	std::string textureShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FragmentTextureShader.glsl";
-	//Shader InputColorShader = Shader(vertexShaderSource, inputColorFragmentShaderSource);
+
 	Shader TextureShader = Shader(vertexShaderSource, textureShaderSource);
 
 	Texture2D testTexture = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FlatMarbleTexture.png");
@@ -92,7 +140,7 @@ int main()
 		0, 2, 3		// Triangle 2
 	};
 
-	glm::mat4 model_matrix = glm::mat4(1.0f);
+	/*glm::mat4 model_matrix = glm::mat4(1.0f);
 	constexpr float model_rotation = glm::radians(-55.0f);
 	model_matrix = glm::rotate(model_matrix, model_rotation, glm::vec3(1.0f, 0.0f, 0.0f));
 
@@ -102,9 +150,10 @@ int main()
 
 	glm::mat4 projection_matrix;
 	constexpr float fov = glm::radians(60.0f);
-	projection_matrix = glm::perspective(fov, float(windowHeight) / float(windowWidth), 0.1f, 100.0f);
+	projection_matrix = glm::perspective(fov, float(windowHeight) / float(windowWidth), 0.1f, 100.0f);*/
 
-	
+	Camera camera = Camera();
+	activeCamera = &camera;
 
 	// Create the vertex array object with the correct number of elements (not bytes)
 	VertexArray va = VertexArray(plane_vertices, sizeof(plane_vertices), indices, sizeof(indices));
@@ -116,11 +165,12 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		constexpr float model_rotation = glm::radians(-1.0f);
-		model_matrix = glm::rotate(model_matrix, model_rotation, glm::vec3(1.0f, 0.0f, 0.0f));
+		//model_matrix = glm::rotate(model_matrix, model_rotation, glm::vec3(1.0f, 1.0f, 1.0f));
 
-		TextureShader.setMatrix4("modelMatrix", model_matrix);
-		TextureShader.setMatrix4("viewMatrix", view_matrix);
-		TextureShader.setMatrix4("projectionMatrix", projection_matrix);
+		TextureShader.setMatrix4("modelMatrix", camera.GetModelMatrix());
+		TextureShader.setMatrix4("viewMatrix", camera.GetViewMatrix());
+		TextureShader.setMatrix4("projectionMatrix", camera.GetProjectionMatrix());
+
 		// Use the shader program
 		TextureShader.Use();
 
