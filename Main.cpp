@@ -44,15 +44,16 @@ void handleMovementInput(int key, int scancode, int action, int mods) {
 	//glm::mat3 movement
 	switch (key) {
 		case GLFW_KEY_W:
-			std::cout << "working" << std::endl;
 			activeCamera->Move(glm::vec3(0.0f, 0.0f, 1.0f));
 			break;
 		case GLFW_KEY_A:
+			activeCamera->Move(glm::vec3(1.0f, 0.0f, 0.0f));
 			break;
 		case GLFW_KEY_S:
+			activeCamera->Move(glm::vec3(0.0f, 0.0f, -1.0f));
 			break;
 		case GLFW_KEY_D:
-			activeCamera->Move(glm::vec3(0.0f, 0.0f, -1.0f));
+			activeCamera->Move(glm::vec3(-1.0f, 0.0f, 0.0f));
 			break;
 	}
 }

@@ -51,7 +51,7 @@ void Camera::_calculateModelMatrix() {
 
 	// wherever the camera is positioned in the world relative to the origin needs to be negated
 	// so that we can translate every other object in the opposite direction
-	this->m_modelMatrix = glm::translate(model_matrix, -1.0f * this->m_position);
+	//this->m_modelMatrix = glm::translate(model_matrix, 1.0f * this->m_position);
 
 	// hardcoding rotation for now, but this should get pulled from the camera attributes as well
 	this->m_modelMatrix = glm::rotate(model_matrix, model_rotation, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -59,7 +59,8 @@ void Camera::_calculateModelMatrix() {
 
 void Camera::_calculateViewMatrix() {
 	glm::mat4 view_matrix = glm::mat4(1.0f);
-	this->m_viewMatrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, this->m_viewDistance));
+	//this->m_viewMatrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, this->m_viewDistance));
+	this->m_viewMatrix = glm::translate(view_matrix, this->m_position);
 }
 
 void Camera::_calculateProjectionMatrix() {
