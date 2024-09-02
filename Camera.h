@@ -33,6 +33,7 @@ private:
 	glm::vec3 m_cameraDirection;
 	glm::vec3 m_cameraUp;
 	glm::vec3 m_cameraRight;
+	glm::mat4 m_lookAt;
 
 	glm::mat4 m_modelMatrix;
 	glm::mat4 m_viewMatrix;

@@ -16,7 +16,7 @@ Camera::Camera(glm::vec3 position)
 	// The direction vector represents where the camera is looking. We can
 	// calculate this by subtracting the vector representing the camera's current position
 	// from the 'point' it's looking at
-	this->m_cameraDirection = glm::normalize(this->m_position - this->m_targetPoint);
+	this->m_cameraDirection = glm::normalize(m_targetPoint - m_position);
 
 	// camera starts 'flat' so the up vector literally just points towards positive y
 	// so we can initialize it (0.0f, 1.0f, 0.0f)
@@ -24,6 +24,8 @@ Camera::Camera(glm::vec3 position)
 
 	// The right vector is the cross product of the up vector and the direction vector
 	this->m_cameraRight = glm::normalize(glm::cross(this->m_cameraUp, this->m_cameraDirection));
+
+	this->m_lookAt = glm::lookAt(this->m_position, this->m_targetPoint, this->m_cameraUp);
 	
 	_calculateModelMatrix();
 	_calculateViewMatrix();
@@ -33,7 +35,11 @@ Camera::Camera(glm::vec3 position)
 // TODO: it's possible over time the floats will drift because of fp inaccuracy from what I've read
 // if that starts to happen try normalizing/rounding them back to fix it
 void Camera::Move(glm::vec3 translation) {
-	this->m_position += translation * this->m_scalingFactor;
+	this->m_position = this->m_position + translation * this->m_scalingFactor;
+
+	this->m_targetPoint = this->m_position + this->m_cameraDirection;
+
+	this->m_lookAt = glm::lookAt(this->m_position, this->m_targetPoint, this->m_cameraUp);
 	std::cout << "Camera position: " << this->m_position.x << ", " << this->m_position.y << ", " << this->m_position.z << std::endl;
 }
 
@@ -63,20 +69,14 @@ glm::mat4 Camera::GetProjectionMatrix() {
 void Camera::_calculateModelMatrix() {
 	// I believe here is where we need to translate/rotate the model matrix based on camera position?
 	glm::mat4 model_matrix = glm::mat4(1.0f);
-	constexpr float model_rotation = glm::radians(-55.0f);
-
-	// wherever the camera is positioned in the world relative to the origin needs to be negated
-	// so that we can translate every other object in the opposite direction
-	//this->m_modelMatrix = glm::translate(model_matrix, 1.0f * this->m_position);
+	constexpr float model_rotation = glm::radians(0.0f);
 
 	// hardcoding rotation for now, but this should get pulled from the camera attributes as well
 	this->m_modelMatrix = glm::rotate(model_matrix, model_rotation, glm::vec3(1.0f, 0.0f, 0.0f));
 }
 
 void Camera::_calculateViewMatrix() {
-	glm::mat4 view_matrix = glm::mat4(1.0f);
-	//this->m_viewMatrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, this->m_viewDistance));
-	this->m_viewMatrix = glm::translate(view_matrix, this->m_position);
+	this->m_viewMatrix = this->m_lookAt;
 }
 
 void Camera::_calculateProjectionMatrix() {
