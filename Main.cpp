@@ -61,25 +61,7 @@ void handleMovementInput(int key, int scancode, int action, int mods) {
     }
 }
 
-float lastXPos = 0.0f;
-float lastYPos = 0.0f;
-bool first = true;
 
-void handleMouseEvent(GLFWwindow* window, double xpos, double ypos) {
-    if (first) { lastXPos = xpos; lastYPos = ypos; first = false; return; }
-
-    std::cout << "Rotating camera - x:" << xpos << " y:" << ypos << std::endl;
-    activeCamera->Rotate(xpos - lastXPos, ypos - lastYPos);
-    lastXPos = xpos;
-    lastYPos = ypos;
-
-    // print out camera details
-    std::cout << "Projection Matrix:" << std::endl;
-    Utils::printMat4(activeCamera->GetProjectionMatrix());
-
-    std::cout << "View Matrix:" << std::endl;
-    Utils::printMat4(activeCamera->GetViewMatrix());
-}
 
 // Temporary way of handling events
 void handleKeyEvent(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -101,6 +83,30 @@ void handleKeyEvent(GLFWwindow* window, int key, int scancode, int action, int m
 GLFWwindow* Window;
 int windowHeight = 800;
 int windowWidth = 800;
+float lastXPos = 0.0f;
+float lastYPos = 0.0f;
+bool first = true;
+
+void handleMouseEvent(GLFWwindow* window, double xpos, double ypos) {
+    if (first) {
+        lastXPos = xpos; 
+        lastYPos = ypos; 
+        first = false;
+        return;
+    }
+
+    std::cout << "Rotating camera - x:" << xpos << " y:" << ypos << std::endl;
+    activeCamera->Rotate(xpos - lastXPos, ypos - lastYPos);
+    lastXPos = xpos;
+    lastYPos = ypos;
+
+    // print out camera details
+    std::cout << "Projection Matrix:" << std::endl;
+    Utils::printMat4(activeCamera->GetProjectionMatrix());
+
+    std::cout << "View Matrix:" << std::endl;
+    Utils::printMat4(activeCamera->GetViewMatrix());
+}
 
 void init() {
     glfwInit();
