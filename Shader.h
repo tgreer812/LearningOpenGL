@@ -12,22 +12,25 @@
 class Shader {
 public:
     Shader() : programID(0) {}
-    virtual ~Shader();
+    Shader(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath) : programID(0) {
+        LoadShaderFiles(vertexShaderFilePath, fragmentShaderFilePath);
+    }
+    ~Shader();
 
     bool LoadShaderSource(const std::string& vertexSource, const std::string& fragmentSource);
-    bool LoadShaderFiles(const std::string& vertexFilePath, const std::string& fragmentFilePath);
+    bool LoadShaderFiles(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath);
 
     bool Compile();
-    virtual void Bind() = 0;
-    virtual void Unbind() = 0;
+    void Bind();
+    void Unbind();
 
     // Uniform setting functions
     void SetUniform(const std::string& name, int value);
     void SetUniform(const std::string& name, float value);
     void SetUniform(const std::string& name, const glm::vec3& value);
     void SetUniform(const std::string& name, const glm::vec4& value);
+    void SetUniform(const std::string& name, const glm::mat3& value);
     void SetUniform(const std::string& name, const glm::mat4& value);
-
 
     // Error checking
     std::string GetErrorLog() const;

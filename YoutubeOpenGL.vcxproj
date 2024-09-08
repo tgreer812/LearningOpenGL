@@ -154,36 +154,27 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="ColorShader.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Plane2D.cpp" />
+    <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Texture2D.cpp" />
-    <ClCompile Include="TextureShader.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\FragmentShader.glsl" />
-    <None Include="Resources\FragmentShader2.glsl" />
-    <None Include="Resources\FragmentShaderInputColor.glsl" />
-    <None Include="Resources\FragmentTextureShader.glsl" />
     <None Include="Resources\VertexShader.glsl" />
-    <None Include="Resources\FragmentShaderUniform.glsl" />
-    <None Include="TextureShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="ColorShader.h" />
-    <ClInclude Include="Plane2D.h" />
+    <ClInclude Include="Plane.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
-    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Libraries\include\stb_image\stb_image.h" />
     <ClInclude Include="Texture2D.h" />
-    <ClInclude Include="TextureShader.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VertexArray.h" />
   </ItemGroup>

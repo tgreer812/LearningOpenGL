@@ -4,12 +4,12 @@
 VertexArray::VertexArray()
     : VAO(0), VBO(0), EBO(0) {
     // Initialize empty vectors for vertices and indices
-    _vertices = std::vector<float>();
-    _indices = std::vector<unsigned int>();
+    m_vertices = std::vector<float>();
+    m_indices = std::vector<unsigned int>();
 }
 
 VertexArray::VertexArray(const std::vector<float>& vertices, const std::vector<unsigned int>& indices)
-    : _vertices(vertices), _indices(indices), VAO(0), VBO(0), EBO(0) {
+    : m_vertices(vertices), m_indices(indices), VAO(0), VBO(0), EBO(0) {
 }
 
 VertexArray::~VertexArray() {
@@ -17,6 +17,10 @@ VertexArray::~VertexArray() {
     if (VAO) glDeleteVertexArrays(1, &VAO);
     if (VBO) glDeleteBuffers(1, &VBO);
     if (EBO) glDeleteBuffers(1, &EBO);
+}
+
+unsigned int VertexArray::GetSize() {
+    return this->m_indices.size();
 }
 
 void VertexArray::Use() {
@@ -34,8 +38,8 @@ void VertexArray::Use() {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(
         GL_ARRAY_BUFFER,
-        _vertices.size() * sizeof(float),  // Correct size in bytes
-        _vertices.data(),
+        m_vertices.size() * sizeof(float),  // Correct size in bytes
+        m_vertices.data(),
         GL_STATIC_DRAW
     );
 
@@ -43,8 +47,8 @@ void VertexArray::Use() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
-        _indices.size() * sizeof(unsigned int),  // Correct size in bytes
-        _indices.data(),
+        m_indices.size() * sizeof(unsigned int),  // Correct size in bytes
+        m_indices.data(),
         GL_STATIC_DRAW
     );
 

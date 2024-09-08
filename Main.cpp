@@ -9,7 +9,7 @@
 #include "Shader.h"
 #include "Texture2D.h"
 #include "Camera.h"
-#include "Plane2D.h"
+#include "Plane.h"
 
 bool wireframe = false;
 
@@ -133,9 +133,9 @@ int main() {
 
     // Load shaders
     std::string vertexShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\VertexShader.glsl";
-    std::string textureShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FragmentTextureShader.glsl";
+    std::string textureShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FragmentShader.glsl";
 
-    //Shader TextureShader = Shader(vertexShaderSource, textureShaderSource);
+    Shader shader = Shader(vertexShaderSource, textureShaderSource);
 
     Texture2D testTexture = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FlatMarbleTexture.png");
 
@@ -143,7 +143,29 @@ int main() {
     activeCamera = &camera;
 
     // Initialize Plane2D with the shader and texture
-    //Plane2D plane = Plane2D(TextureShader, testTexture);
+    Plane plane = Plane();
+
+    std::vector<float> vertexPositions = plane.GetVertexPositions();
+    
+    // For now just make the colors white
+    // should probably get this from a 'material' going forward
+    std::vector<float> vertexColors = {
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+    };
+
+    // would probably also get this from a material?
+    std::vector<float> textureCoords = {
+        1.0f, 1.0f,         // top right
+        1.0f, 0.0f,         // bottom right
+        0.0f, 0.0f,         // bottom left
+        0.0f, 1.0f          // top left
+    };
+
+    // Create a vertex array
+    VertexArray()
 
     // Graphics loop
     while (!glfwWindowShouldClose(Window)) {
