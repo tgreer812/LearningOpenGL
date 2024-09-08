@@ -5,14 +5,14 @@ out vec4 FragColor;
 in vec3 ourColor;
 in vec2 TexCoord;
 
-uniform sampler2D ourTexture;
+uniform sampler2D aTexture;
 uniform bool useTexture;   // Flag to determine whether to use texture or color
 uniform float blendFactor; // Blend factor (0.0 = only color, 1.0 = only texture)
 
 void main()
 {
     // Fetch the texture color
-    vec4 texColor = texture(ourTexture, TexCoord);
+    vec4 texColor = texture(aTexture, TexCoord);
     
     // Convert ourColor to a vec4 with an alpha of 1.0
     vec4 color = vec4(ourColor, 1.0);

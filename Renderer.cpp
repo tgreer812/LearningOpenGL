@@ -13,9 +13,9 @@ void Renderer::Draw(Shader& shader, VertexArray& va, glm::mat4& modelMatrix, glm
 	shader.Bind();
 
 	// Set uniforms - this MUST happen after the shader is bound
-	shader.SetUniform("modelMatrix", modelMatrix);
-	shader.SetUniform("viewMatrix", viewMatrix);
-	shader.SetUniform("projectionMatrix", projectionMatrix);
+	shader.SetMat4("modelMatrix", modelMatrix);
+	shader.SetMat4("viewMatrix", viewMatrix);
+	shader.SetMat4("projectionMatrix", projectionMatrix);
 	
 	// Bind the vertex array
 	va.Use();

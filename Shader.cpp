@@ -92,23 +92,23 @@ void Shader::Unbind() {
     glUseProgram(0);
 }
 
-void Shader::SetUniform(const std::string& name, int value) {
+void Shader::SetInt(const std::string& name, int value) {
     glUniform1i(glGetUniformLocation(this->programID, name.c_str()), value);
 }
 
-void Shader::SetUniform(const std::string& name, float value) {
+void Shader::SetFloat(const std::string& name, float value) {
     glUniform1f(glGetUniformLocation(this->programID, name.c_str()), value);
 }
 
-void Shader::SetUniform(const std::string& name, const glm::vec3& value) {
+void Shader::SetFloat3(const std::string& name, const glm::vec3& value) {
     glUniform3fv(glGetUniformLocation(this->programID, name.c_str()), 1, glm::value_ptr(value));
 }
 
-void Shader::SetUniform(const std::string& name, const glm::vec4& value) {
+void Shader::SetFloat4(const std::string& name, const glm::vec4& value) {
     glUniform4fv(glGetUniformLocation(this->programID, name.c_str()), 1, glm::value_ptr(value));
 }
 
-void Shader::SetUniform(const std::string& name, const glm::mat3& value) {
+void Shader::SetMat3(const std::string& name, const glm::mat3& value) {
     // stands for 3x3 matrix float vector
     glUniformMatrix3fv(
         glGetUniformLocation(this->programID, name.c_str()),
@@ -118,7 +118,7 @@ void Shader::SetUniform(const std::string& name, const glm::mat3& value) {
     );
 }
 
-void Shader::SetUniform(const std::string& name, const glm::mat4& value) {
+void Shader::SetMat4(const std::string& name, const glm::mat4& value) {
     // stands for 4x4 matrix float vector
     glUniformMatrix4fv(
         glGetUniformLocation(this->programID, name.c_str()),

@@ -25,12 +25,12 @@ public:
     void Unbind();
 
     // Uniform setting functions
-    void SetUniform(const std::string& name, int value);
-    void SetUniform(const std::string& name, float value);
-    void SetUniform(const std::string& name, const glm::vec3& value);
-    void SetUniform(const std::string& name, const glm::vec4& value);
-    void SetUniform(const std::string& name, const glm::mat3& value);
-    void SetUniform(const std::string& name, const glm::mat4& value);
+    void SetInt(const std::string& name, int value);
+    void SetFloat(const std::string& name, float value);
+    void SetFloat3(const std::string& name, const glm::vec3& value);
+    void SetFloat4(const std::string& name, const glm::vec4& value);
+    void SetMat3(const std::string& name, const glm::mat3& value);
+    void SetMat4(const std::string& name, const glm::mat4& value);
 
     // Error checking
     std::string GetErrorLog() const;

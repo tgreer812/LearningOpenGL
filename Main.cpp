@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "Plane.h"
 #include "Renderer.h"
+#include "Material.h"
 
 bool wireframe = false;
 
@@ -186,7 +187,8 @@ int main() {
 
     Shader shader = Shader(vertexShaderSource, textureShaderSource);
 
-    Texture2D testTexture = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FlatMarbleTexture.png");
+    //Texture2D testTexture = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FlatMarbleTexture.png");
+    Texture2D grassSideTex = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\GrassBlockSide.png");
 
     Camera camera = Camera();
     activeCamera = &camera;
@@ -201,6 +203,9 @@ int main() {
 
     // Initialize Plane2D with the shader and texture
     Plane plane = Plane(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0, 1.0);
+    Material grassSideMat = Material(shader);
+    grassSideMat.SetTexture(grassSideTex);
+    grassSideMat.SetBlend(1.0f);
 
     std::vector<float> vertexPositions = plane.GetVertexPositions();
     

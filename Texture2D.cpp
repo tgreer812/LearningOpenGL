@@ -4,6 +4,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image/stb_image.h"
 
+Texture2D::Texture2D() {}
 Texture2D::Texture2D(const std::string path) : Texture2D(path, 4) {}
 
 // For now store the image in memory
@@ -63,6 +64,7 @@ void Texture2D::Bind() {
     }
 
     glActiveTexture(GL_TEXTURE0); // Activate texture unit 0
+    this->m_textureUnit = GL_TEXTURE0;
     glBindTexture(GL_TEXTURE_2D, m_textureID); // Bind the texture ID generated earlier
 }
 
@@ -74,3 +76,5 @@ int Texture2D::GetHeight() { return this->m_height; }
 BYTE* Texture2D::GetBuffer() { return (BYTE*)this->m_buffer.data(); }
 
 int Texture2D::GetSize() { return this->m_buffer.size(); }
+
+unsigned int Texture2D::GetTextureUnit() { return this->m_textureUnit; }
