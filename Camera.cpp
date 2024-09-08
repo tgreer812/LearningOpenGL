@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include <iostream>
+#include "Utils.h"
 
 Camera::Camera() : Camera(glm::vec3(0.0f, 0.0f, -3.0f)) {}
 
@@ -8,7 +9,7 @@ Camera::Camera(glm::vec3 position)
 	this->m_position = position;
 	this->m_fov = glm::radians(60.0f);
 	this->m_viewDistance = -3.0f;
-	this->m_lookSensitivity = 0.01f;
+	this->m_lookSensitivity = 0.1f;
 
 	// Have the camera 'look towards' the origin of the world
 	this->m_targetPoint = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -27,7 +28,6 @@ Camera::Camera(glm::vec3 position)
 
 	this->m_lookAt = glm::lookAt(this->m_position, this->m_targetPoint, this->m_cameraUp);
 	
-	//_calculateModelMatrix();
 	_calculateViewMatrix();
 	_calculateProjectionMatrix();
 }
@@ -57,8 +57,16 @@ void Camera::Rotate(float xoffset, float yoffset) {
 	this->m_yaw += xoffset * this->m_lookSensitivity;
 	this->m_pitch += yoffset * this->m_lookSensitivity;
 
+	std::cout << "Yaw: " << m_yaw << " Pitch: " << m_pitch << std::endl;
+	
+
+
 	if (m_pitch > 89.0f) { m_pitch = 89.0f; }
 	if (m_pitch < -89.0f) { m_pitch = -89.0f; }
+
+	if (this->m_yaw > 360.0f) { this->m_yaw -= 360.0f; }
+	if (this->m_yaw < -360.0f) { this->m_yaw += 360.0f; }
+
 
 	glm::vec3 direction;
 	direction.x = cos(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
@@ -66,9 +74,16 @@ void Camera::Rotate(float xoffset, float yoffset) {
 	direction.z = sin(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
 	this->m_cameraDirection = glm::normalize(direction);
 
+	std::cout << "Camera Direction: (" << m_cameraDirection.x << ", " << m_cameraDirection.y << ", " << m_cameraDirection.z << ")" << std::endl;
+
 	// recalculate target point
 	this->m_cameraRight = glm::normalize(glm::cross(this->m_cameraDirection, this->m_cameraUp));
 	this->m_targetPoint = this->m_position + this->m_cameraDirection;
+
+	// debug TODO remove
+	std::cout << "target point:" << std::endl;
+	Utils::printVec3(this->m_targetPoint);
+	// Update the look at matrix
 	this->m_lookAt = glm::lookAt(this->m_position, this->m_targetPoint, this->m_cameraUp);
 }
 
@@ -79,11 +94,6 @@ void Camera::SetAspectRatio(float aspectRatio) {
 void Camera::SetViewDistance(float viewDistance) {
 	this->m_viewDistance;
 }
-
-//glm::mat4 Camera::GetModelMatrix() {
-//	_calculateModelMatrix();
-//	return this->m_modelMatrix;
-//}
 
 glm::mat4 Camera::GetViewMatrix() {
 	_calculateViewMatrix();

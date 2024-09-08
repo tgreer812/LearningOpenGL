@@ -72,6 +72,13 @@ void handleMouseEvent(GLFWwindow* window, double xpos, double ypos) {
     activeCamera->Rotate(xpos - lastXPos, ypos - lastYPos);
     lastXPos = xpos;
     lastYPos = ypos;
+
+    // print out camera details
+    std::cout << "Projection Matrix:" << std::endl;
+    Utils::printMat4(activeCamera->GetProjectionMatrix());
+
+    std::cout << "View Matrix:" << std::endl;
+    Utils::printMat4(activeCamera->GetViewMatrix());
 }
 
 // Temporary way of handling events
@@ -178,6 +185,14 @@ int main() {
     Camera camera = Camera();
     activeCamera = &camera;
 
+    // print out camera details
+    std::cout << "Projection Matrix:" << std::endl;
+    Utils::printMat4(camera.GetProjectionMatrix());
+
+    std::cout << "View Matrix:" << std::endl;
+    Utils::printMat4(camera.GetViewMatrix());
+
+
     // Initialize Plane2D with the shader and texture
     Plane plane = Plane(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0, 1.0);
 
@@ -203,10 +218,10 @@ int main() {
     std::vector<float> vertexBuffer = CreateInterleavedVertexBuffer(vertexPositions, vertexColors, textureCoords);
     
     // debug
-    for (auto v : vertexBuffer) {
+    /*for (auto v : vertexBuffer) {
         std::cout << v;
     }
-    std::cout << std::endl;
+    std::cout << std::endl;*/
 
     // Create a vertex array
     VertexArray va = VertexArray(vertexBuffer, plane.GetIndices());
@@ -215,6 +230,8 @@ int main() {
 
     // TODO: remove this
     //activeCamera->Disable();
+    std::cout << "Model Matrix:" << std::endl;
+    Utils::printMat4(plane.GetModelMatrix());
 
     // Graphics loop
     while (!glfwWindowShouldClose(Window)) {
