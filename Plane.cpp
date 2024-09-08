@@ -26,18 +26,18 @@ glm::vec2 Plane::GetSize() const { return this->m_size; }
 std::vector<float> Plane::GetVertexPositions() const {
     // Local space coordinates for the plane (centered around origin)
     return {
-        -1.0f, -1.0f, 0.0f,  // Bottom-left
-         1.0f, -1.0f, 0.0f,  // Bottom-right
-         1.0f,  1.0f, 0.0f,  // Top-right
-        -1.0f,  1.0f, 0.0f   // Top-left
+        -1.0f,  1.0f, 0.0f,     // Top-left
+         1.0f,  1.0f, 0.0f,     // Top-right
+        -1.0f, -1.0f, 0.0f,     // Bottom-left
+         1.0f, -1.0f, 0.0f,     // Bottom-right    
     };
 }
 
 // Optionally, return indices for indexed drawing
 std::vector<unsigned int> Plane::GetIndices() const {
     return {
-        0, 2, 3,  // First triangle
-        0, 1, 2   // Second triangle
+        0, 1, 2,                // First triangle
+        1, 2, 3                 // Second triangle
     };
 }
 

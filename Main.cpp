@@ -10,6 +10,7 @@
 #include "Texture2D.h"
 #include "Camera.h"
 #include "Plane.h"
+#include "Renderer.h"
 
 bool wireframe = false;
 
@@ -37,6 +38,8 @@ float lastFrameTime = 0.0f;
 void handleMovementInput(int key, int scancode, int action, int mods) {
     // Temporary
     if (activeCamera == nullptr) { std::cout << "No camera set!\n";  return; }
+
+    //if (!activeCamera.Enabled()) { return; }
 
     // Only process key down events
     if (!(action == GLFW_PRESS || action == GLFW_REPEAT)) { return; }
@@ -128,6 +131,39 @@ void init() {
     glfwSetCursorPosCallback(Window, handleMouseEvent);
 }
 
+std::vector<float> CreateInterleavedVertexBuffer(
+    const std::vector<float>& vertexPositions,
+    const std::vector<float>& vertexColors,
+    const std::vector<float>& textureCoords)
+{
+    std::vector<float> interleavedBuffer;
+
+    // Ensure all vectors are the same length (in terms of number of vertices)
+    size_t numVertices = vertexPositions.size() / 3; // 3 floats per position
+    if (vertexColors.size() / 3 != numVertices || textureCoords.size() / 2 != numVertices) {
+        throw std::runtime_error("Mismatch in vertex data sizes.");
+    }
+
+    // Interleave the data: position (3 floats), color (3 floats), texture coord (2 floats)
+    for (size_t i = 0; i < numVertices; i++) {
+        // Add position (3 floats)
+        interleavedBuffer.push_back(vertexPositions[i * 3 + 0]);
+        interleavedBuffer.push_back(vertexPositions[i * 3 + 1]);
+        interleavedBuffer.push_back(vertexPositions[i * 3 + 2]);
+
+        // Add color (3 floats)
+        interleavedBuffer.push_back(vertexColors[i * 3 + 0]);
+        interleavedBuffer.push_back(vertexColors[i * 3 + 1]);
+        interleavedBuffer.push_back(vertexColors[i * 3 + 2]);
+
+        // Add texture coordinates (2 floats)
+        interleavedBuffer.push_back(textureCoords[i * 2 + 0]);
+        interleavedBuffer.push_back(textureCoords[i * 2 + 1]);
+    }
+
+    return interleavedBuffer;
+}
+
 int main() {
     init();
 
@@ -143,29 +179,42 @@ int main() {
     activeCamera = &camera;
 
     // Initialize Plane2D with the shader and texture
-    Plane plane = Plane();
+    Plane plane = Plane(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0, 1.0);
 
     std::vector<float> vertexPositions = plane.GetVertexPositions();
     
     // For now just make the colors white
     // should probably get this from a 'material' going forward
     std::vector<float> vertexColors = {
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
+        0.0f, 0.5f, 0.0f,
+        0.0f, 0.5f, 0.0f,
+        0.0f, 0.5f, 0.0f,
+        0.0f, 0.5f, 0.0f,
     };
 
     // would probably also get this from a material?
     std::vector<float> textureCoords = {
+        0.0f, 1.0f,         // top left
         1.0f, 1.0f,         // top right
-        1.0f, 0.0f,         // bottom right
         0.0f, 0.0f,         // bottom left
-        0.0f, 1.0f          // top left
+        1.0f, 0.0f,         // bottom right
     };
 
+    std::vector<float> vertexBuffer = CreateInterleavedVertexBuffer(vertexPositions, vertexColors, textureCoords);
+    
+    // debug
+    for (auto v : vertexBuffer) {
+        std::cout << v;
+    }
+    std::cout << std::endl;
+
     // Create a vertex array
-    VertexArray()
+    VertexArray va = VertexArray(vertexBuffer, plane.GetIndices());
+
+    Renderer renderer = Renderer();
+
+    // TODO: remove this
+    //activeCamera->Disable();
 
     // Graphics loop
     while (!glfwWindowShouldClose(Window)) {
@@ -173,12 +222,10 @@ int main() {
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Update camera matrices in the shader
-        //TextureShader.setMatrix4("viewMatrix", camera.GetViewMatrix());
-        //TextureShader.setMatrix4("projectionMatrix", camera.GetProjectionMatrix());
-
-        // Draw the plane
-        //plane.Draw(camera.GetViewMatrix(), camera.GetProjectionMatrix());
+        glm::mat4 modelMatrix = plane.GetModelMatrix();
+        glm::mat4 viewMatrix = camera.GetViewMatrix();
+        glm::mat4 projectionMatrix = camera.GetProjectionMatrix();
+        renderer.Draw(shader, va, modelMatrix, viewMatrix, projectionMatrix);
 
         // Swap buffers and poll events
         glfwSwapBuffers(Window);

@@ -35,6 +35,8 @@ Camera::Camera(glm::vec3 position)
 // TODO: it's possible over time the floats will drift because of fp inaccuracy from what I've read
 // if that starts to happen try normalizing/rounding them back to fix it
 void Camera::Move(glm::vec3 translation, float deltaTime) {
+	if (!Enabled()) { return; }
+
 	// Move forward/backward (along the camera's direction) and left/right (along the camera's right vector)
 	this->m_position -= translation.x * this->m_cameraRight * this->m_cameraSpeed * deltaTime; // Strafe left/right
 	this->m_position += translation.z * this->m_cameraDirection * this->m_cameraSpeed * deltaTime; // Move forward/backward
@@ -50,6 +52,8 @@ void Camera::Move(glm::vec3 translation, float deltaTime) {
 
 
 void Camera::Rotate(float xoffset, float yoffset) {
+	if (!Enabled()) { return; }
+
 	this->m_yaw += xoffset * this->m_lookSensitivity;
 	this->m_pitch += yoffset * this->m_lookSensitivity;
 
@@ -90,15 +94,6 @@ glm::mat4 Camera::GetProjectionMatrix() {
 	_calculateProjectionMatrix();
 	return this->m_projectionMatrix;
 }
-
-//void Camera::_calculateModelMatrix() {
-//	// I believe here is where we need to translate/rotate the model matrix based on camera position?
-//	glm::mat4 model_matrix = glm::mat4(1.0f);
-//	constexpr float model_rotation = glm::radians(0.0f);
-//
-//	// hardcoding rotation for now, but this should get pulled from the camera attributes as well
-//	this->m_modelMatrix = glm::rotate(model_matrix, model_rotation, glm::vec3(1.0f, 0.0f, 0.0f));
-//}
 
 void Camera::_calculateViewMatrix() {
 	this->m_viewMatrix = this->m_lookAt;

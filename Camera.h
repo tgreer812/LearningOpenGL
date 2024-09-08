@@ -16,6 +16,10 @@ public:
 	void SetAspectRatio(float aspectRatio);
 	void SetViewDistance(float viewDistance);
 
+	bool Enabled() { return this->m_cameraEnabled; }
+	void Enable() { this->m_cameraEnabled = true; }
+	void Disable() { this->m_cameraEnabled = false; }
+
 	//glm::mat4 GetModelMatrix();
 	glm::mat4 GetViewMatrix();
 	glm::mat4 GetProjectionMatrix();
@@ -34,6 +38,8 @@ private:
 	float m_pitch = 0.0f;	// pitch is the degrees of rotation about the x axis
 
 	//float m_roll;	// not implemented
+
+	bool m_cameraEnabled = true;
 
 	glm::vec3 m_targetPoint;
 	glm::vec3 m_cameraDirection;
