@@ -156,6 +156,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Texture2D.cpp" />
@@ -164,18 +165,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\FragmentShader.glsl" />
-    <None Include="Resources\FragmentShader2.glsl" />
-    <None Include="Resources\FragmentShaderInputColor.glsl" />
-    <None Include="Resources\FragmentTextureShader.glsl" />
     <None Include="Resources\VertexShader.glsl" />
-    <None Include="Resources\FragmentShaderUniform.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Plane.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
-    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Libraries\include\stb_image\stb_image.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VertexArray.h" />

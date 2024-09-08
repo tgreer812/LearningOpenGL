@@ -2,7 +2,7 @@
 #include "glad/glad.h"
 #include <iostream>
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "stb_image/stb_image.h"
 
 Texture2D::Texture2D(const std::string path) : Texture2D(path, 4) {}
 
