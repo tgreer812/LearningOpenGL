@@ -1,18 +1,23 @@
 #pragma once
-
+#include <vector>
 #include "glad/glad.h"
-#include "vector"
 
-class VertexArray
-{
+class VertexArray {
 public:
-	VertexArray(const float vertices[], size_t vertexCount, const unsigned int indices[], size_t indexCount);
-	~VertexArray();
-	
-	void Use();
+    // Default constructor
+    VertexArray();
+
+    // Constructor that takes vectors of vertices and indices
+    VertexArray(const std::vector<float>& vertices, const std::vector<unsigned int>& indices);
+
+    // Destructor
+    ~VertexArray();
+
+    // Method to bind and use the vertex array
+    void Use();
 
 private:
-	std::vector<float> _vertices;
-	std::vector<unsigned int> _indices;
+    std::vector<float> _vertices;
+    std::vector<unsigned int> _indices;
+    GLuint VAO, VBO, EBO;
 };
-

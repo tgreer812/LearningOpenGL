@@ -27,7 +27,7 @@ Camera::Camera(glm::vec3 position)
 
 	this->m_lookAt = glm::lookAt(this->m_position, this->m_targetPoint, this->m_cameraUp);
 	
-	_calculateModelMatrix();
+	//_calculateModelMatrix();
 	_calculateViewMatrix();
 	_calculateProjectionMatrix();
 }
@@ -76,10 +76,10 @@ void Camera::SetViewDistance(float viewDistance) {
 	this->m_viewDistance;
 }
 
-glm::mat4 Camera::GetModelMatrix() {
-	_calculateModelMatrix();
-	return this->m_modelMatrix;
-}
+//glm::mat4 Camera::GetModelMatrix() {
+//	_calculateModelMatrix();
+//	return this->m_modelMatrix;
+//}
 
 glm::mat4 Camera::GetViewMatrix() {
 	_calculateViewMatrix();
@@ -91,14 +91,14 @@ glm::mat4 Camera::GetProjectionMatrix() {
 	return this->m_projectionMatrix;
 }
 
-void Camera::_calculateModelMatrix() {
-	// I believe here is where we need to translate/rotate the model matrix based on camera position?
-	glm::mat4 model_matrix = glm::mat4(1.0f);
-	constexpr float model_rotation = glm::radians(0.0f);
-
-	// hardcoding rotation for now, but this should get pulled from the camera attributes as well
-	this->m_modelMatrix = glm::rotate(model_matrix, model_rotation, glm::vec3(1.0f, 0.0f, 0.0f));
-}
+//void Camera::_calculateModelMatrix() {
+//	// I believe here is where we need to translate/rotate the model matrix based on camera position?
+//	glm::mat4 model_matrix = glm::mat4(1.0f);
+//	constexpr float model_rotation = glm::radians(0.0f);
+//
+//	// hardcoding rotation for now, but this should get pulled from the camera attributes as well
+//	this->m_modelMatrix = glm::rotate(model_matrix, model_rotation, glm::vec3(1.0f, 0.0f, 0.0f));
+//}
 
 void Camera::_calculateViewMatrix() {
 	this->m_viewMatrix = this->m_lookAt;

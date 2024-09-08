@@ -16,7 +16,7 @@ public:
 	void SetAspectRatio(float aspectRatio);
 	void SetViewDistance(float viewDistance);
 
-	glm::mat4 GetModelMatrix();
+	//glm::mat4 GetModelMatrix();
 	glm::mat4 GetViewMatrix();
 	glm::mat4 GetProjectionMatrix();
 
@@ -41,11 +41,11 @@ private:
 	glm::vec3 m_cameraRight;
 	glm::mat4 m_lookAt;
 
-	glm::mat4 m_modelMatrix;
+	//glm::mat4 m_modelMatrix;
 	glm::mat4 m_viewMatrix;
 	glm::mat4 m_projectionMatrix;
 
-	void _calculateModelMatrix();
+	//void _calculateModelMatrix();
 	void _calculateViewMatrix();
 	void _calculateProjectionMatrix();
 };
