@@ -7,7 +7,7 @@ in vec2 TexCoord;
 
 uniform sampler2D aTexture;
 uniform bool useTexture;   // Flag to determine whether to use texture or color
-uniform float blendFactor; // Blend factor (0.0 = only color, 1.0 = only texture)
+uniform float blendFactor; // Blend factor (0.0 = only color, 1.0 = only texture) - only applies when useTexture is true
 
 void main()
 {

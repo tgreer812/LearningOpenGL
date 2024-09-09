@@ -23,21 +23,21 @@ public:
 		//Material material = mesh.GetMaterial();
 
 		// Set camera uniforms
-		mesh.GetMaterial().GetShader().Bind();
-		mesh.GetMaterial().GetShader().SetMat4("modelMatrix", modelMatrix);
-		mesh.GetMaterial().GetShader().SetMat4("viewMatrix", viewMatrix);
-		mesh.GetMaterial().GetShader().SetMat4("projectionMatrix", projectionMatrix);
+		Shader shader = mesh.GetMaterial().GetShader();
+		shader.Bind();
+		shader.SetMat4("modelMatrix", modelMatrix);
+		shader.SetMat4("viewMatrix", viewMatrix);
+		shader.SetMat4("projectionMatrix", projectionMatrix);
 
-		mesh.Bind();
+		unsigned int vaSize = mesh.Bind();
 
 		// Bind the vertex array
-		//va.Use();
-		//glDrawElements(
-		//	GL_TRIANGLES,			// Use triangle as primitive
-		//	va.GetSize(),			// This gets the number of non-repeated vertices (i.e the indices)
-		//	GL_UNSIGNED_INT,		// The 'type' of data
-		//	nullptr					// ptr to the indices - however we bind our index data to an index buffer, so we just specify nullptr
-		//);
+		glDrawElements(
+			GL_TRIANGLES,			// Use triangle as primitive
+			vaSize,					// This gets the number of non-repeated vertices (i.e the indices)
+			GL_UNSIGNED_INT,		// The 'type' of data
+			nullptr					// ptr to the indices - however we bind our index data to an index buffer, so we just specify nullptr
+		);
 	}
 
 private:

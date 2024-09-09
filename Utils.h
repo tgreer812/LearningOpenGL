@@ -23,6 +23,8 @@ namespace Utils {
     // Utility to print glm::mat4
     void printMat4(const glm::mat4& m);
 
+    void printVector(const std::vector<float>& vec);
+
     std::vector<float> CreateInterleavedVertexBuffer(
         const std::vector<float>& vertexPositions,
         const std::vector<float>& vertexColors,

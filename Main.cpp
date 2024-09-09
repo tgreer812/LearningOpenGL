@@ -155,7 +155,7 @@ int main() {
 
     Shader shader = Shader(vertexShaderSource, textureShaderSource);
 
-    //Texture2D testTexture = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FlatMarbleTexture.png");
+    //Texture2D grassSideTex = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FlatMarbleTexture.png");
     Texture2D grassSideTex = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\GrassBlockSide.png");
 
     Camera camera = Camera();
@@ -173,7 +173,7 @@ int main() {
     Plane plane = Plane(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0, 1.0);
     Material grassSideMat = Material(shader);
     grassSideMat.SetVertexColor(glm::vec3(1.0f, 1.0f, 1.0f));
-    //grassSideMat.SetTexture(grassSideTex);
+    grassSideMat.SetTexture(grassSideTex);
     grassSideMat.SetBlend(1.0f);
     grassSideMat.SetTextureCoords({
         0.0f, 1.0f,   // Top-left
@@ -183,30 +183,6 @@ int main() {
     });
 
     Mesh<Plane> planeMesh = Mesh<Plane>(plane, grassSideMat);
-
-    //std::vector<float> vertexPositions = plane.GetVertexPositions();
-    
-    // For now just make the colors white
-    // should probably get this from a 'material' going forward
-    //std::vector<float> vertexColors = {
-    //    0.0f, 0.5f, 0.0f,
-    //    0.0f, 0.5f, 0.0f,
-    //    0.0f, 0.5f, 0.0f,
-    //    0.0f, 0.5f, 0.0f,
-    //};
-
-    //// would probably also get this from a material?
-    //std::vector<float> textureCoords = {
-    //    0.0f, 1.0f,         // top left
-    //    1.0f, 1.0f,         // top right
-    //    0.0f, 0.0f,         // bottom left
-    //    1.0f, 0.0f,         // bottom right
-    //};
-
-    //std::vector<float> vertexBuffer = CreateInterleavedVertexBuffer(vertexPositions, vertexColors, textureCoords);
-
-    // Create a vertex array
-    //VertexArray va = VertexArray(vertexBuffer, plane.GetIndices());
 
     Renderer renderer = Renderer();
 

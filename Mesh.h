@@ -7,39 +7,43 @@
 template <typename T>
 class Mesh {
 public:
-
-    Mesh(const T& geometry, Material& material) {
-        this->m_geometry = geometry;
-        this->m_material = material;
+    Mesh(const T& geometry, Material& material)
+        : m_geometry(geometry), m_material(material) {
+        // Initialize VAO and buffers during construction
+        InitializeBuffers();
     }
 
-    void Bind() {
-        std::vector<float> positions = this->m_geometry.GetVertexPositions();
-        std::vector<unsigned int> indices = this->m_geometry.GetIndices();
-        glm::vec3 color = this->m_material.GetVertexColor();
+    // Bind the material and VAO for drawing
+    unsigned int Bind() {
+        m_material.Use();    // Bind the material (and thus the shader)
 
-        // I KNOW this is going to cause problems for me later but meh
-        std::vector<float> vertexColors = Utils::FillVector3(color, positions.size() / 3);
-        std::vector<float> textureCoords = this->m_material.GetTextureCoords();
-
-        std::vector<float> vbo = Utils::CreateInterleavedVertexBuffer(
-            positions,
-            vertexColors,
-            textureCoords
-        );
-
-        this->m_material.Use();
-        VertexArray va = VertexArray(vbo, indices);
-        va.Use();
-
+        // Just bind the pre-initialized VAO
+        va.Use();           // Bind the vertex array object (VAO)
+        return va.GetSize(); // Return the size of the indices (for draw call)
     }
 
-    T GetGeometry() { return m_geometry; }
-    Material GetMaterial() { return this->m_material; }
-
+    // Getter for the material
+    Material& GetMaterial() {
+        return m_material;
+    }
 
 private:
+    // Method to initialize the VAO, VBO, and EBO
+    void InitializeBuffers() {
+        std::vector<float> positions = m_geometry.GetVertexPositions();
+        std::vector<unsigned int> indices = m_geometry.GetIndices();
+        glm::vec3 color = m_material.GetVertexColor();
+
+        std::vector<float> vertexColors = Utils::FillVector3(color, positions.size() / 3);
+        std::vector<float> textureCoords = m_material.GetTextureCoords();
+
+        std::vector<float> vbo = Utils::CreateInterleavedVertexBuffer(positions, vertexColors, textureCoords);
+
+        // Initialize the vertex array (VAO) and buffers (VBO, EBO)
+        va = VertexArray(vbo, indices);
+    }
+
     T m_geometry;
     Material m_material;
-    VertexArray va;
+    VertexArray va;  // Store this as a member variable, initialized once
 };

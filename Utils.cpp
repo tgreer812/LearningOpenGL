@@ -1,5 +1,6 @@
 #pragma once
 #include "Utils.h"
+#include <vector>
 
 namespace Utils {
     std::string readFile(const std::string& filePath) {
@@ -20,6 +21,15 @@ namespace Utils {
 	    }
 
 	    return buffer;
+    }
+
+
+    void printVector(const std::vector<float>& vec) {
+        std::cout << "vector(";
+        for (auto f : vec) {
+            std::cout << f << ", ";
+        }
+        std::cout << ")" << std::endl;
     }
 
     // Utility to print glm::vec3
