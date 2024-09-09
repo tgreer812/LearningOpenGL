@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <glm/glm.hpp>
+#include <vector>
 
 namespace Utils {
 
@@ -21,5 +22,16 @@ namespace Utils {
 
     // Utility to print glm::mat4
     void printMat4(const glm::mat4& m);
+
+    std::vector<float> CreateInterleavedVertexBuffer(
+        const std::vector<float>& vertexPositions,
+        const std::vector<float>& vertexColors,
+        const std::vector<float>& textureCoords
+    );
+
+    /**
+    * Returns a vector of floats created by replicating the color parameter fillSize times
+    **/
+    std::vector<float> FillVector3(glm::vec3 color, unsigned int fillSize);
 
 }

@@ -92,6 +92,10 @@ void Shader::Unbind() {
     glUseProgram(0);
 }
 
+void Shader::SetBool(const std::string& name, bool value) {
+    glUniform1i(glGetUniformLocation(this->programID, name.c_str()), value);
+}
+
 void Shader::SetInt(const std::string& name, int value) {
     glUniform1i(glGetUniformLocation(this->programID, name.c_str()), value);
 }

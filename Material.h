@@ -7,13 +7,21 @@
 
 class Material
 {
-public: 
+public:
+    Material() : m_blendFactor(1.0f), m_useTexture(false), m_vertexColor(1.0f, 1.0f, 1.0f) {};
     Material(Shader shader);
+
+    glm::vec3 GetVertexColor();
 
     // TODO: update this to vec4 to support alpha channel
     void SetVertexColor(glm::vec3 color);
     void SetTexture(Texture2D texture);
     void SetBlend(float blendAmount);
+    void SetTextureCoords(std::vector<float> texCoords);
+    void SetShader(Shader shader) { this->m_shader = shader; }
+    std::vector<float> GetTextureCoords();
+
+    Shader GetShader();
 
     void Use();
 
@@ -23,5 +31,6 @@ private:
     glm::vec3 m_vertexColor;
     Texture2D m_texture;
     float m_blendFactor;
+    std::vector<float> m_texCoords;
 };
 

@@ -1,8 +1,10 @@
 #pragma once
-#include "VertexArray.h"
+//#include "VertexArray.h"
+#include "Geometry.h"
 #include <glm/glm.hpp>
+#include "VertexArray.h"
 
-class Plane
+class Plane : public Geometry
 {
 public:
     // Constructors
@@ -22,7 +24,7 @@ public:
     glm::vec2 GetSize() const;
 
     // Returns the vertex array object (VAO) that external code can use to render
-    std::vector<float> GetVertexPositions() const;
+    virtual std::vector<float> GetVertexPositions() const override;
     std::vector<unsigned int> GetIndices() const;
 
     glm::mat4 GetModelMatrix() const;

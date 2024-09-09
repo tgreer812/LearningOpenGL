@@ -145,38 +145,6 @@ void init() {
     glfwSetCursorPosCallback(Window, handleMouseEvent);
 }
 
-std::vector<float> CreateInterleavedVertexBuffer(
-    const std::vector<float>& vertexPositions,
-    const std::vector<float>& vertexColors,
-    const std::vector<float>& textureCoords)
-{
-    std::vector<float> interleavedBuffer;
-
-    // Ensure all vectors are the same length (in terms of number of vertices)
-    size_t numVertices = vertexPositions.size() / 3; // 3 floats per position
-    if (vertexColors.size() / 3 != numVertices || textureCoords.size() / 2 != numVertices) {
-        throw std::runtime_error("Mismatch in vertex data sizes.");
-    }
-
-    // Interleave the data: position (3 floats), color (3 floats), texture coord (2 floats)
-    for (size_t i = 0; i < numVertices; i++) {
-        // Add position (3 floats)
-        interleavedBuffer.push_back(vertexPositions[i * 3 + 0]);
-        interleavedBuffer.push_back(vertexPositions[i * 3 + 1]);
-        interleavedBuffer.push_back(vertexPositions[i * 3 + 2]);
-
-        // Add color (3 floats)
-        interleavedBuffer.push_back(vertexColors[i * 3 + 0]);
-        interleavedBuffer.push_back(vertexColors[i * 3 + 1]);
-        interleavedBuffer.push_back(vertexColors[i * 3 + 2]);
-
-        // Add texture coordinates (2 floats)
-        interleavedBuffer.push_back(textureCoords[i * 2 + 0]);
-        interleavedBuffer.push_back(textureCoords[i * 2 + 1]);
-    }
-
-    return interleavedBuffer;
-}
 
 int main() {
     init();
@@ -204,45 +172,43 @@ int main() {
     // Initialize Plane2D with the shader and texture
     Plane plane = Plane(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0, 1.0);
     Material grassSideMat = Material(shader);
-    grassSideMat.SetTexture(grassSideTex);
+    grassSideMat.SetVertexColor(glm::vec3(1.0f, 1.0f, 1.0f));
+    //grassSideMat.SetTexture(grassSideTex);
     grassSideMat.SetBlend(1.0f);
+    grassSideMat.SetTextureCoords({
+        0.0f, 1.0f,   // Top-left
+        1.0f, 1.0f,   // Top-right
+        0.0f, 0.0f,   // Bottom-left
+        1.0f, 0.0f    // Bottom-right
+    });
 
-    std::vector<float> vertexPositions = plane.GetVertexPositions();
+    Mesh<Plane> planeMesh = Mesh<Plane>(plane, grassSideMat);
+
+    //std::vector<float> vertexPositions = plane.GetVertexPositions();
     
     // For now just make the colors white
     // should probably get this from a 'material' going forward
-    std::vector<float> vertexColors = {
-        0.0f, 0.5f, 0.0f,
-        0.0f, 0.5f, 0.0f,
-        0.0f, 0.5f, 0.0f,
-        0.0f, 0.5f, 0.0f,
-    };
+    //std::vector<float> vertexColors = {
+    //    0.0f, 0.5f, 0.0f,
+    //    0.0f, 0.5f, 0.0f,
+    //    0.0f, 0.5f, 0.0f,
+    //    0.0f, 0.5f, 0.0f,
+    //};
 
-    // would probably also get this from a material?
-    std::vector<float> textureCoords = {
-        0.0f, 1.0f,         // top left
-        1.0f, 1.0f,         // top right
-        0.0f, 0.0f,         // bottom left
-        1.0f, 0.0f,         // bottom right
-    };
+    //// would probably also get this from a material?
+    //std::vector<float> textureCoords = {
+    //    0.0f, 1.0f,         // top left
+    //    1.0f, 1.0f,         // top right
+    //    0.0f, 0.0f,         // bottom left
+    //    1.0f, 0.0f,         // bottom right
+    //};
 
-    std::vector<float> vertexBuffer = CreateInterleavedVertexBuffer(vertexPositions, vertexColors, textureCoords);
-    
-    // debug
-    /*for (auto v : vertexBuffer) {
-        std::cout << v;
-    }
-    std::cout << std::endl;*/
+    //std::vector<float> vertexBuffer = CreateInterleavedVertexBuffer(vertexPositions, vertexColors, textureCoords);
 
     // Create a vertex array
-    VertexArray va = VertexArray(vertexBuffer, plane.GetIndices());
+    //VertexArray va = VertexArray(vertexBuffer, plane.GetIndices());
 
     Renderer renderer = Renderer();
-
-    // TODO: remove this
-    //activeCamera->Disable();
-    std::cout << "Model Matrix:" << std::endl;
-    Utils::printMat4(plane.GetModelMatrix());
 
     // Graphics loop
     while (!glfwWindowShouldClose(Window)) {
@@ -253,7 +219,9 @@ int main() {
         glm::mat4 modelMatrix = plane.GetModelMatrix();
         glm::mat4 viewMatrix = camera.GetViewMatrix();
         glm::mat4 projectionMatrix = camera.GetProjectionMatrix();
-        renderer.Draw(shader, va, modelMatrix, viewMatrix, projectionMatrix);
+        //renderer.Draw()
+        //renderer.Draw(shader, va, modelMatrix, viewMatrix, projectionMatrix);
+        renderer.Draw<Plane>(planeMesh, modelMatrix, viewMatrix, projectionMatrix);
 
         // Swap buffers and poll events
         glfwSwapBuffers(Window);
