@@ -170,16 +170,16 @@ int main() {
 
 
     // Initialize Plane2D with the shader and texture
-    Plane plane = Plane(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0, 1.0);
+    Plane plane = Plane(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f);
     Material grassSideMat = Material(shader);
     grassSideMat.SetVertexColor(glm::vec3(1.0f, 1.0f, 1.0f));
     grassSideMat.SetTexture(grassSideTex);
     grassSideMat.SetBlend(1.0f);
     grassSideMat.SetTextureCoords({
-        0.0f, 1.0f,   // Top-left
-        1.0f, 1.0f,   // Top-right
-        0.0f, 0.0f,   // Bottom-left
-        1.0f, 0.0f    // Bottom-right
+        0.0f, 0.0f,  // Bottom-left
+        1.0f, 0.0f,  // Bottom-right
+        0.0f, 1.0f,  // Top-left
+        1.0f, 1.0f   // Top-right
     });
 
     Mesh<Plane> planeMesh = Mesh<Plane>(plane, grassSideMat);

@@ -26,15 +26,14 @@ std::vector<float> Material::GetTextureCoords() {
     return this->m_texCoords;
 }
 
-
 void Material::SetBlend(float blendFactor) {
-    m_blendFactor = glm::mod(blendFactor, 1.0f);
+    // Clamp the blend factor to be between 0.0f and 1.0f
+    m_blendFactor = glm::clamp(blendFactor, 0.0f, 1.0f);
 }
-
 
 void Material::Use() {
     this->m_shader.Bind();
-    this->m_shader.SetBool("", this->m_useTexture);
+    this->m_shader.SetBool("useTexture", this->m_useTexture);
     if (this->m_useTexture) { 
         
         this->m_texture.Bind();

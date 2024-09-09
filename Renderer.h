@@ -7,7 +7,7 @@
 class Renderer
 {
 public:
-	Renderer();
+	Renderer() {}
 
 	// TODO: make this use materials instead of shaders
 	// Have a material class responsible for knowing the uniforms of a specific shader

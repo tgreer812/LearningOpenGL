@@ -37,8 +37,10 @@ Texture2D::Texture2D(const std::string path, int channels) {
     // Set texture parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     // Upload texture data
     glTexImage2D(
@@ -64,8 +66,8 @@ void Texture2D::Bind() {
     }
 
     glActiveTexture(GL_TEXTURE0); // Activate texture unit 0
-    this->m_textureUnit = GL_TEXTURE0;
     glBindTexture(GL_TEXTURE_2D, m_textureID); // Bind the texture ID generated earlier
+    this->m_textureUnit = 0;
 }
 
 
@@ -77,4 +79,6 @@ BYTE* Texture2D::GetBuffer() { return (BYTE*)this->m_buffer.data(); }
 
 int Texture2D::GetSize() { return this->m_buffer.size(); }
 
-unsigned int Texture2D::GetTextureUnit() { return this->m_textureUnit; }
+unsigned int Texture2D::GetTextureUnit() { 
+    return this->m_textureUnit; 
+}
