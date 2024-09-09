@@ -17,11 +17,6 @@ public:
 	// for now though just going to do this since we only have one shader
 	template <typename T>
 	void Draw(Mesh<T>& mesh, glm::mat4& modelMatrix, glm::mat4& viewMatrix, glm::mat4& projectionMatrix) {
-		// Bind the shader
-		//shader.Bind();
-		//material.Use();
-		//Material material = mesh.GetMaterial();
-
 		// Set camera uniforms
 		Shader shader = mesh.GetMaterial().GetShader();
 		shader.Bind();

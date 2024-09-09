@@ -161,6 +161,9 @@ int main() {
     Camera camera = Camera();
     activeCamera = &camera;
 
+    // Enable depth testing
+    glEnable(GL_DEPTH_TEST);
+
     // print out camera details
     std::cout << "Projection Matrix:" << std::endl;
     Utils::printMat4(camera.GetProjectionMatrix());
@@ -168,9 +171,22 @@ int main() {
     std::cout << "View Matrix:" << std::endl;
     Utils::printMat4(camera.GetViewMatrix());
 
+    std::vector<Plane> planes = {};
+    // Initialize all 6 faces of the cube
+    Plane frontFace = Plane(0.0f, 0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f); // Front face
+    Plane rightFace = Plane(0.5f, 0.0f, 0.0f, 0.0f, glm::radians(90.0f), 0.0f, 1.0f, 1.0f); // Right face
+    Plane leftFace = Plane(-0.5f, 0.0f, 0.0f, 0.0f, glm::radians(-90.0f), 0.0f, 1.0f, 1.0f); // Left face
+    Plane backFace = Plane(0.0f, 0.0f, -0.5f, 0.0f, glm::radians(180.0f), 0.0f, 1.0f, 1.0f); // Back face
+    Plane topFace = Plane(0.0f, 0.5f, 0.0f, glm::radians(-90.0f), 0.0f, 0.0f, 1.0f, 1.0f);  // Top face
+    Plane bottomFace = Plane(0.0f, -0.5f, 0.0f, glm::radians(90.0f), 0.0f, 0.0f, 1.0f, 1.0f);   // Bottom face
 
-    // Initialize Plane2D with the shader and texture
-    Plane plane = Plane(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+    planes.push_back(frontFace);
+    planes.push_back(rightFace);
+    planes.push_back(leftFace);
+    planes.push_back(backFace);
+    planes.push_back(topFace);
+    planes.push_back(bottomFace);
+
     Material grassSideMat = Material(shader);
     grassSideMat.SetVertexColor(glm::vec3(1.0f, 1.0f, 1.0f));
     grassSideMat.SetTexture(grassSideTex);
@@ -182,22 +198,31 @@ int main() {
         1.0f, 1.0f   // Top-right
     });
 
-    Mesh<Plane> planeMesh = Mesh<Plane>(plane, grassSideMat);
+    std::vector<Mesh<Plane>> planeMeshes;
+    for (auto& plane : planes) {
+        planeMeshes.push_back(Mesh<Plane>(plane, grassSideMat));
+    }
 
     Renderer renderer = Renderer();
 
     // Graphics loop
     while (!glfwWindowShouldClose(Window)) {
+        
+
         // Clear the screen with the background color
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glm::mat4 modelMatrix = plane.GetModelMatrix();
+        
         glm::mat4 viewMatrix = camera.GetViewMatrix();
         glm::mat4 projectionMatrix = camera.GetProjectionMatrix();
-        //renderer.Draw()
-        //renderer.Draw(shader, va, modelMatrix, viewMatrix, projectionMatrix);
-        renderer.Draw<Plane>(planeMesh, modelMatrix, viewMatrix, projectionMatrix);
+
+        // this will eventually get replaced with looping through
+        // all models in the scene
+        for (auto& curPlane : planeMeshes) {
+            glm::mat4 modelMatrix = curPlane.GetGeometry().GetModelMatrix();
+            renderer.Draw<Plane>(curPlane, modelMatrix, viewMatrix, projectionMatrix);
+        }
 
         // Swap buffers and poll events
         glfwSwapBuffers(Window);

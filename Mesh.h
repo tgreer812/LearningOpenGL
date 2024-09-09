@@ -22,6 +22,10 @@ public:
         return va.GetSize(); // Return the size of the indices (for draw call)
     }
 
+    T& GetGeometry() {
+        return m_geometry;
+    }
+
     // Getter for the material
     Material& GetMaterial() {
         return m_material;
