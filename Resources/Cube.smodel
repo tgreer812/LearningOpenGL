@@ -1,40 +1,67 @@
 # Vertices (x, y, z)
+
+# NOTE: orderings are listed as if the direction vector of the camera
+# is perpendicular to the face
+# Front (bl, br, tl, tr)
 v -1.0 -1.0  1.0
 v  1.0 -1.0  1.0
 v -1.0  1.0  1.0
 v  1.0  1.0  1.0
+
+# Back Face (br, bl, tr, tl)
 v -1.0 -1.0 -1.0
 v  1.0 -1.0 -1.0
 v -1.0  1.0 -1.0
 v  1.0  1.0 -1.0
+
+# Left Face (bl, tl, br, tr)
 v -1.0 -1.0 -1.0
 v -1.0  1.0 -1.0
 v -1.0 -1.0  1.0
 v -1.0  1.0  1.0
+
+# Right Face
 v  1.0 -1.0 -1.0
 v  1.0  1.0 -1.0
 v  1.0 -1.0  1.0
 v  1.0  1.0  1.0
+
+# Top Face
 v -1.0  1.0 -1.0
 v  1.0  1.0 -1.0
 v -1.0  1.0  1.0
 v  1.0  1.0  1.0
+
+# Bottom Face
 v -1.0 -1.0 -1.0
 v  1.0 -1.0 -1.0
 v -1.0 -1.0  1.0
 v  1.0 -1.0  1.0
 
 # Indices
+
+# Front Face
 i 0 1 2
 i 1 3 2
+
+# Back Face
 i 4 6 5
 i 5 6 7
+
+# Left Face
 i 0 2 4
 i 4 2 6
-i 1 5 3
+
+# Right Face
+#i 1 5 3
+i 1 3 5
 i 5 7 3
+
+# Top Face
 i 2 3 6
 i 3 7 6
+
+# Bottom Face
 i 0 4 1
 i 1 4 5
 
@@ -65,26 +92,43 @@ c 0.0 1.0 1.0
 c 0.0 1.0 1.0
 
 # Texture Coordinates (u, v)
+
+# Front Face
 t 0.0 0.0
 t 1.0 0.0
 t 0.0 1.0
 t 1.0 1.0
+
+# Back Face
 t 0.0 0.0
 t 1.0 0.0
 t 0.0 1.0
 t 1.0 1.0
+#originalbackface
+# t 0.0 0.0
+# t 1.0 0.0
+# t 0.0 1.0
+# t 1.0 1.0
+
+# Left Face
 t 0.0 0.0
 t 1.0 0.0
 t 0.0 1.0
 t 1.0 1.0
+
+# Right Face
+t 0.0 0.0
+t 0.0 1.0
+t 0.0 1.0
+t 1.0 1.0
+
+# Top Face
 t 0.0 0.0
 t 1.0 0.0
 t 0.0 1.0
 t 1.0 1.0
-t 0.0 0.0
-t 1.0 0.0
-t 0.0 1.0
-t 1.0 1.0
+
+# Bottom Face
 t 0.0 0.0
 t 1.0 0.0
 t 0.0 1.0

@@ -302,7 +302,7 @@ int main() {
     Shader shader(vertexShaderSource, textureShaderSource);
     //Shader shader2 = Shader(vertexShaderSource, textureShaderSource);
 
-    //Texture2D marbleSideTex = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FlatMarbleTexture.png");
+    Texture2D marbleSideTex = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FlatMarbleTexture.png");
     //Texture2D grassSideTex = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\GrassBlockSide.png");
 
     Camera camera = Camera();
@@ -318,11 +318,10 @@ int main() {
     std::cout << "View Matrix:" << std::endl;
     Utils::printMat4(camera.GetViewMatrix());
 
-    //Material grassSideMat(shader);
-    //grassSideMat.SetVertexColor(glm::vec3(1.0f, 1.0f, 1.0f));
-    //grassSideMat.SetTexture(grassSideTex);
-    //grassSideMat.SetBlend(1.0f);
-    // 
+    Material grassSideMat(shader);
+    grassSideMat.SetTexture(marbleSideTex);
+    grassSideMat.SetBlend(0.5f);
+     
     // Create a model matrix for the cube
     glm::mat4 modelMatrix(1.0f);  // Initialize as identity matrix
 
@@ -362,12 +361,17 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //glClear(GL_COLOR_BUFFER_BIT);
 
-        shader.Bind();
+        grassSideMat.Use();
+        grassSideMat.m_shader.SetMat4("modelMatrix", modelMatrix);
+        grassSideMat.m_shader.SetMat4("projectionMatrix", activeCamera->GetProjectionMatrix());
+        grassSideMat.m_shader.SetMat4("viewMatrix", activeCamera->GetViewMatrix());
+
+        /*shader.Bind();
         shader.SetBool("useTexture", false);
         glm::mat4 modelMatrix(1.0f);
         shader.SetMat4("modelMatrix", modelMatrix);
         shader.SetMat4("projectionMatrix", activeCamera->GetProjectionMatrix());
-        shader.SetMat4("viewMatrix", activeCamera->GetViewMatrix());
+        shader.SetMat4("viewMatrix", activeCamera->GetViewMatrix());*/
         va.Bind();
 
         // Bind the vertex array
