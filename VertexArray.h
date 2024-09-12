@@ -8,7 +8,7 @@ public:
     VertexArray();
 
     // Constructor that takes vectors of vertices and indices
-    VertexArray(const std::vector<float>& vertices, const std::vector<unsigned int>& indices);
+    VertexArray(const std::vector<float>& vbo, const std::vector<unsigned int>& indices);
 
     // Prevent copying of VertexArray
     VertexArray(const VertexArray& other) = delete;

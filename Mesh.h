@@ -14,26 +14,26 @@ public:
     std::vector<unsigned int> Indices;
     glm::mat4 m_modelMatrix;
     
-    Camera m_camera;
+    Camera* m_camera;
 
     Mesh(
-        std::vector<float> vertices,
-        std::vector<unsigned int> indices,
-        std::vector<float> colors,
-        std::vector<float> textureCoords,
-        glm::mat4 modelMatrix,
-        Material material,
-        Camera camera
+        const std::vector<float> vertices,
+        const std::vector<unsigned int> indices,
+        const std::vector<float> colors,
+        const std::vector<float> textureCoords,
+        const glm::mat4 modelMatrix,
+        Material &material,
+        Camera &camera
     ) : 
         // Initializer list
         Vertices(vertices), 
         Colors(colors), 
         TextureCoords(textureCoords), 
         Indices(indices), 
-        m_material(material), 
-        m_camera(camera), 
+        m_camera(&camera), 
         m_modelMatrix(modelMatrix)
     {
+        m_material = std::move(material);
         this->initialize();
     }
 
@@ -42,11 +42,12 @@ public:
     Mesh& operator=(const Mesh&) = delete;
 
     unsigned int Bind() {
-        this->vertexArray.Bind();
+        
         this->m_material.Use();
-        this->m_material.GetShader().SetMat4("ModelMatrix", m_modelMatrix);
-        this->m_material.GetShader().SetMat4("ProjectionMatrix", m_camera.GetProjectionMatrix());
-        this->m_material.GetShader().SetMat4("ProjectionMatrix", m_camera.GetViewMatrix());
+        this->m_material.m_shader.SetMat4("ModelMatrix", m_modelMatrix);
+        this->m_material.m_shader.SetMat4("ProjectionMatrix", m_camera->GetProjectionMatrix());
+        this->m_material.m_shader.SetMat4("ViewMatrix", m_camera->GetViewMatrix());
+        this->vertexArray.Bind();
         
 
         return this->Indices.size();

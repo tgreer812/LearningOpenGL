@@ -9,7 +9,7 @@ class Material
 {
 public:
     Material() : m_blendFactor(1.0f), m_useTexture(false), m_vertexColor(1.0f, 1.0f, 1.0f) {};
-    Material(Shader shader);
+    Material(Shader &shader);
 
     glm::vec3 GetVertexColor();
 
@@ -18,16 +18,16 @@ public:
     void SetTexture(Texture2D texture);
     void SetBlend(float blendAmount);
     //void SetTextureCoords(std::vector<float> texCoords);
-    void SetShader(Shader shader) { this->m_shader = shader; }
+    void SetShader(Shader shader) { this->m_shader = std::move(shader); }
     //std::vector<float> GetTextureCoords();
 
-    Shader GetShader();
+    Shader m_shader;
 
     void Use();
 
 private:
     bool m_useTexture;
-    Shader m_shader;
+    
     glm::vec3 m_vertexColor;
     Texture2D m_texture;
     float m_blendFactor;                // Blends the vertex color and the texture. 1.0 is all texture. 0.0 is all color

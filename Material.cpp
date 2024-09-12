@@ -1,8 +1,13 @@
 #include "Material.h"
 #include "glm/glm.hpp"
 
-Material::Material(Shader shader) : m_shader(shader), m_useTexture(false), m_blendFactor(0.0), m_vertexColor(1.0, 1.0, 1.0) {
-
+/**
+* Material constructor
+* WARNING: This moves the supplied shader into a member variable! Do not attempt to use the supplied shader
+* after the fact!
+*/
+Material::Material(Shader &shader) : m_useTexture(false), m_blendFactor(0.0), m_vertexColor(1.0, 1.0, 1.0) {
+    this->m_shader = std::move(shader);
 }
 
 glm::vec3 Material::GetVertexColor() { return this->m_vertexColor; }
@@ -11,7 +16,6 @@ void Material::SetVertexColor(glm::vec3 color) {
     this->m_vertexColor = color;
 }
 
-Shader Material::GetShader() { return this->m_shader; }
 
 void Material::SetTexture(Texture2D texture) {
     this->m_useTexture = true;

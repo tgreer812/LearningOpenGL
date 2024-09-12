@@ -13,6 +13,7 @@
 #include "Renderer.h"
 #include "Mesh.h"
 #include "Material.h"
+#include "SimpleModel.h"
 
 bool wireframe = false;
 
@@ -146,135 +147,135 @@ void init() {
     glfwSetCursorPosCallback(Window, handleMouseEvent);
 }
 
-std::vector<float> Vertices = {
-    // Front face (each vertex has a unique texture coordinate)
-    -1.0f, -1.0f,  1.0f,  // Vertex 0
-     1.0f, -1.0f,  1.0f,  // Vertex 1
-    -1.0f,  1.0f,  1.0f,  // Vertex 2
-     1.0f,  1.0f,  1.0f,  // Vertex 3
-
-     // Back face
-     -1.0f, -1.0f, -1.0f,  // Vertex 4
-      1.0f, -1.0f, -1.0f,  // Vertex 5
-     -1.0f,  1.0f, -1.0f,  // Vertex 6
-      1.0f,  1.0f, -1.0f,  // Vertex 7
-
-      // Left face
-      -1.0f, -1.0f, -1.0f,  // Vertex 8
-      -1.0f,  1.0f, -1.0f,  // Vertex 9
-      -1.0f, -1.0f,  1.0f,  // Vertex 10
-      -1.0f,  1.0f,  1.0f,  // Vertex 11
-
-      // Right face
-       1.0f, -1.0f, -1.0f,  // Vertex 12
-       1.0f,  1.0f, -1.0f,  // Vertex 13
-       1.0f, -1.0f,  1.0f,  // Vertex 14
-       1.0f,  1.0f,  1.0f,  // Vertex 15
-
-       // Top face
-       -1.0f,  1.0f, -1.0f,  // Vertex 16
-        1.0f,  1.0f, -1.0f,  // Vertex 17
-       -1.0f,  1.0f,  1.0f,  // Vertex 18
-        1.0f,  1.0f,  1.0f,  // Vertex 19
-
-        // Bottom face
-        -1.0f, -1.0f, -1.0f,  // Vertex 20
-         1.0f, -1.0f, -1.0f,  // Vertex 21
-        -1.0f, -1.0f,  1.0f,  // Vertex 22
-         1.0f, -1.0f,  1.0f   // Vertex 23
-};
-
-
-std::vector<unsigned int> Indices = {
-    // Front face
-    0, 1, 2, 1, 3, 2,
-    // Back face
-    4, 6, 5, 5, 6, 7,
-    // Left face
-    0, 2, 4, 4, 2, 6,
-    // Right face
-    1, 5, 3, 5, 7, 3,
-    // Top face
-    2, 3, 6, 3, 7, 6,
-    // Bottom face
-    0, 4, 1, 1, 4, 5
-};
-
-std::vector<float> Colors = {
-    // Front face (Red)
-    1.0f, 0.0f, 0.0f,   // Vertex 0
-    1.0f, 0.0f, 0.0f,   // Vertex 1
-    1.0f, 0.0f, 0.0f,   // Vertex 2
-    1.0f, 0.0f, 0.0f,   // Vertex 3
-
-    // Back face (Green)
-    0.0f, 1.0f, 0.0f,   // Vertex 4
-    0.0f, 1.0f, 0.0f,   // Vertex 5
-    0.0f, 1.0f, 0.0f,   // Vertex 6
-    0.0f, 1.0f, 0.0f,   // Vertex 7
-
-    // Left face (Blue)
-    0.0f, 0.0f, 1.0f,   // Vertex 8
-    0.0f, 0.0f, 1.0f,   // Vertex 9
-    0.0f, 0.0f, 1.0f,   // Vertex 10
-    0.0f, 0.0f, 1.0f,   // Vertex 11
-
-    // Right face (Yellow)
-    1.0f, 1.0f, 0.0f,   // Vertex 12
-    1.0f, 1.0f, 0.0f,   // Vertex 13
-    1.0f, 1.0f, 0.0f,   // Vertex 14
-    1.0f, 1.0f, 0.0f,   // Vertex 15
-
-    // Top face (White)
-    1.0f, 1.0f, 1.0f,   // Vertex 16
-    1.0f, 1.0f, 1.0f,   // Vertex 17
-    1.0f, 1.0f, 1.0f,   // Vertex 18
-    1.0f, 1.0f, 1.0f,   // Vertex 19
-
-    // Bottom face (Cyan)
-    0.0f, 1.0f, 1.0f,   // Vertex 20
-    0.0f, 1.0f, 1.0f,   // Vertex 21
-    0.0f, 1.0f, 1.0f,   // Vertex 22
-    0.0f, 1.0f, 1.0f    // Vertex 23
-};
-
-std::vector<float> TextureCoords = {
-    // Front face
-    0.0f, 0.0f,  // Vertex 0
-    1.0f, 0.0f,  // Vertex 1
-    0.0f, 1.0f,  // Vertex 2
-    1.0f, 1.0f,  // Vertex 3
-
-    // Back face
-    0.0f, 0.0f,  // Vertex 4
-    1.0f, 0.0f,  // Vertex 5
-    0.0f, 1.0f,  // Vertex 6
-    1.0f, 1.0f,  // Vertex 7
-
-    // Left face
-    0.0f, 0.0f,  // Vertex 8
-    1.0f, 0.0f,  // Vertex 9
-    0.0f, 1.0f,  // Vertex 10
-    1.0f, 1.0f,  // Vertex 11
-
-    // Right face
-    0.0f, 0.0f,  // Vertex 12
-    1.0f, 0.0f,  // Vertex 13
-    0.0f, 1.0f,  // Vertex 14
-    1.0f, 1.0f,  // Vertex 15
-
-    // Top face
-    0.0f, 0.0f,  // Vertex 16
-    1.0f, 0.0f,  // Vertex 17
-    0.0f, 1.0f,  // Vertex 18
-    1.0f, 1.0f,  // Vertex 19
-
-    // Bottom face
-    0.0f, 0.0f,  // Vertex 20
-    1.0f, 0.0f,  // Vertex 21
-    0.0f, 1.0f,  // Vertex 22
-    1.0f, 1.0f   // Vertex 23
-};
+//std::vector<float> Vertices = {
+//    // Front face (each vertex has a unique texture coordinate)
+//    -1.0f, -1.0f,  1.0f,  // Vertex 0
+//     1.0f, -1.0f,  1.0f,  // Vertex 1
+//    -1.0f,  1.0f,  1.0f,  // Vertex 2
+//     1.0f,  1.0f,  1.0f,  // Vertex 3
+//
+//     // Back face
+//     -1.0f, -1.0f, -1.0f,  // Vertex 4
+//      1.0f, -1.0f, -1.0f,  // Vertex 5
+//     -1.0f,  1.0f, -1.0f,  // Vertex 6
+//      1.0f,  1.0f, -1.0f,  // Vertex 7
+//
+//      // Left face
+//      -1.0f, -1.0f, -1.0f,  // Vertex 8
+//      -1.0f,  1.0f, -1.0f,  // Vertex 9
+//      -1.0f, -1.0f,  1.0f,  // Vertex 10
+//      -1.0f,  1.0f,  1.0f,  // Vertex 11
+//
+//      // Right face
+//       1.0f, -1.0f, -1.0f,  // Vertex 12
+//       1.0f,  1.0f, -1.0f,  // Vertex 13
+//       1.0f, -1.0f,  1.0f,  // Vertex 14
+//       1.0f,  1.0f,  1.0f,  // Vertex 15
+//
+//       // Top face
+//       -1.0f,  1.0f, -1.0f,  // Vertex 16
+//        1.0f,  1.0f, -1.0f,  // Vertex 17
+//       -1.0f,  1.0f,  1.0f,  // Vertex 18
+//        1.0f,  1.0f,  1.0f,  // Vertex 19
+//
+//        // Bottom face
+//        -1.0f, -1.0f, -1.0f,  // Vertex 20
+//         1.0f, -1.0f, -1.0f,  // Vertex 21
+//        -1.0f, -1.0f,  1.0f,  // Vertex 22
+//         1.0f, -1.0f,  1.0f   // Vertex 23
+//};
+//
+//
+//std::vector<unsigned int> Indices = {
+//    // Front face
+//    0, 1, 2, 1, 3, 2,
+//    // Back face
+//    4, 6, 5, 5, 6, 7,
+//    // Left face
+//    0, 2, 4, 4, 2, 6,
+//    // Right face
+//    1, 5, 3, 5, 7, 3,
+//    // Top face
+//    2, 3, 6, 3, 7, 6,
+//    // Bottom face
+//    0, 4, 1, 1, 4, 5
+//};
+//
+//std::vector<float> Colors = {
+//    // Front face (Red)
+//    1.0f, 0.0f, 0.0f,   // Vertex 0
+//    1.0f, 0.0f, 0.0f,   // Vertex 1
+//    1.0f, 0.0f, 0.0f,   // Vertex 2
+//    1.0f, 0.0f, 0.0f,   // Vertex 3
+//
+//    // Back face (Green)
+//    0.0f, 1.0f, 0.0f,   // Vertex 4
+//    0.0f, 1.0f, 0.0f,   // Vertex 5
+//    0.0f, 1.0f, 0.0f,   // Vertex 6
+//    0.0f, 1.0f, 0.0f,   // Vertex 7
+//
+//    // Left face (Blue)
+//    0.0f, 0.0f, 1.0f,   // Vertex 8
+//    0.0f, 0.0f, 1.0f,   // Vertex 9
+//    0.0f, 0.0f, 1.0f,   // Vertex 10
+//    0.0f, 0.0f, 1.0f,   // Vertex 11
+//
+//    // Right face (Yellow)
+//    1.0f, 1.0f, 0.0f,   // Vertex 12
+//    1.0f, 1.0f, 0.0f,   // Vertex 13
+//    1.0f, 1.0f, 0.0f,   // Vertex 14
+//    1.0f, 1.0f, 0.0f,   // Vertex 15
+//
+//    // Top face (White)
+//    1.0f, 1.0f, 1.0f,   // Vertex 16
+//    1.0f, 1.0f, 1.0f,   // Vertex 17
+//    1.0f, 1.0f, 1.0f,   // Vertex 18
+//    1.0f, 1.0f, 1.0f,   // Vertex 19
+//
+//    // Bottom face (Cyan)
+//    0.0f, 1.0f, 1.0f,   // Vertex 20
+//    0.0f, 1.0f, 1.0f,   // Vertex 21
+//    0.0f, 1.0f, 1.0f,   // Vertex 22
+//    0.0f, 1.0f, 1.0f    // Vertex 23
+//};
+//
+//std::vector<float> TextureCoords = {
+//    // Front face
+//    0.0f, 0.0f,  // Vertex 0
+//    1.0f, 0.0f,  // Vertex 1
+//    0.0f, 1.0f,  // Vertex 2
+//    1.0f, 1.0f,  // Vertex 3
+//
+//    // Back face
+//    0.0f, 0.0f,  // Vertex 4
+//    1.0f, 0.0f,  // Vertex 5
+//    0.0f, 1.0f,  // Vertex 6
+//    1.0f, 1.0f,  // Vertex 7
+//
+//    // Left face
+//    0.0f, 0.0f,  // Vertex 8
+//    1.0f, 0.0f,  // Vertex 9
+//    0.0f, 1.0f,  // Vertex 10
+//    1.0f, 1.0f,  // Vertex 11
+//
+//    // Right face
+//    0.0f, 0.0f,  // Vertex 12
+//    1.0f, 0.0f,  // Vertex 13
+//    0.0f, 1.0f,  // Vertex 14
+//    1.0f, 1.0f,  // Vertex 15
+//
+//    // Top face
+//    0.0f, 0.0f,  // Vertex 16
+//    1.0f, 0.0f,  // Vertex 17
+//    0.0f, 1.0f,  // Vertex 18
+//    1.0f, 1.0f,  // Vertex 19
+//
+//    // Bottom face
+//    0.0f, 0.0f,  // Vertex 20
+//    1.0f, 0.0f,  // Vertex 21
+//    0.0f, 1.0f,  // Vertex 22
+//    1.0f, 1.0f   // Vertex 23
+//};
 
 
 
@@ -285,8 +286,20 @@ int main() {
     // Load shaders
     std::string vertexShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\VertexShader.glsl";
     std::string textureShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FragmentShader.glsl";
+    std::string simpleVertexShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\SimpleVertexShader.glsl";
+    std::string simpleFragmentShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\SimpleFragmentShader.glsl";
+    std::string triangleModelFile = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\Triangle.smodel";
+    std::string cubeModelFile = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\Cube.smodel";
 
-    Shader shader = Shader(vertexShaderSource, textureShaderSource);
+    // Load triangle model
+    SimpleModel triangleModel(cubeModelFile);
+
+    if (!triangleModel.modelLoaded) { std::cout << "Failed to load model!" << std::endl; return -1; }
+
+
+
+    //Shader simpleShader = Shader(simpleVertexShaderSource, simpleFragmentShaderSource);
+    Shader shader(vertexShaderSource, textureShaderSource);
     //Shader shader2 = Shader(vertexShaderSource, textureShaderSource);
 
     //Texture2D marbleSideTex = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FlatMarbleTexture.png");
@@ -305,31 +318,40 @@ int main() {
     std::cout << "View Matrix:" << std::endl;
     Utils::printMat4(camera.GetViewMatrix());
 
-    Material grassSideMat = Material(shader);
+    //Material grassSideMat(shader);
     //grassSideMat.SetVertexColor(glm::vec3(1.0f, 1.0f, 1.0f));
     //grassSideMat.SetTexture(grassSideTex);
-    grassSideMat.SetBlend(0.0f);
+    //grassSideMat.SetBlend(1.0f);
     // 
     // Create a model matrix for the cube
-    glm::mat4 modelMatrix = glm::mat4(1.0f);  // Initialize as identity matrix
+    glm::mat4 modelMatrix(1.0f);  // Initialize as identity matrix
 
     // Apply scaling transformation to make the cube 5x5x5
-    modelMatrix = glm::scale(modelMatrix, glm::vec3(5.0f, 5.0f, 5.0f));
+    //modelMatrix = glm::scale(modelMatrix, glm::vec3(5.0f, 5.0f, 5.0f));
 
     // Apply translation to move the cube further back into the camera's view
-    modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, -10.0f));
+    //modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, -5.0f));
 
-    Mesh testBlock(
-        Vertices,
-        Indices,
-        Colors,
-        TextureCoords,
-        modelMatrix,
-        grassSideMat,
-        *activeCamera
-    );
+    //Mesh testBlock(
+    //    triangleModel.Vertices,
+    //    triangleModel.Indices,
+    //    triangleModel.Colors,
+    //    triangleModel.TextureCoords,
+    //    modelMatrix,
+    //    grassSideMat,
+    //    *activeCamera
+    //);
 
-    Renderer renderer = Renderer();
+    const std::vector<float> vbo(Utils::CreateInterleavedVertexBuffer(
+        triangleModel.Vertices,
+        triangleModel.Colors,
+        triangleModel.TextureCoords
+    ));
+    VertexArray va(vbo, triangleModel.Indices);
+
+    //Renderer renderer = Renderer();
+
+    glEnable(GL_DEPTH_TEST);
 
     // Graphics loop
     while (!glfwWindowShouldClose(Window)) {
@@ -337,18 +359,26 @@ int main() {
 
         // Clear the screen with the background color
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //glClear(GL_COLOR_BUFFER_BIT);
 
-        
-        glm::mat4 viewMatrix = camera.GetViewMatrix();
-        glm::mat4 projectionMatrix = camera.GetProjectionMatrix();
+        shader.Bind();
+        shader.SetBool("useTexture", false);
+        glm::mat4 modelMatrix(1.0f);
+        shader.SetMat4("modelMatrix", modelMatrix);
+        shader.SetMat4("projectionMatrix", activeCamera->GetProjectionMatrix());
+        shader.SetMat4("viewMatrix", activeCamera->GetViewMatrix());
+        va.Bind();
 
-        renderer.Draw(testBlock);
-        GLenum error = glGetError();
-        if (error != GL_NO_ERROR) {
-            std::cout << "OpenGL Error: " << error << std::endl;
-        }   
+        // Bind the vertex array
+        GL_CALL(glDrawElements(
+            GL_TRIANGLES,			// Use triangle as primitive
+            36,				    // This gets the number of unique vertices
+            GL_UNSIGNED_INT,		// The 'type' of data
+            nullptr					// ptr to the indices - however we bind our index data to an index buffer, so we just specify nullptr
+        ));
+
+        //renderer.Draw(testBlock);
 
         //glm::mat4 modelMatrix1 = planeMesh1.GetGeometry().GetModelMatrix();
         

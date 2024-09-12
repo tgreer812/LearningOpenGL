@@ -29,7 +29,7 @@ public:
 			nullptr					// ptr to the indices - however we bind our index data to an index buffer, so we just specify nullptr
 		));
 
-		mesh.Unbind();
+		//mesh.Unbind();
 	}
 
 private:

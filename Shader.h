@@ -15,6 +15,14 @@ public:
     Shader(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath) : programID(0) {
         LoadShaderFiles(vertexShaderFilePath, fragmentShaderFilePath);
     }
+
+    Shader(const Shader& other) = delete;
+    Shader& operator=(const Shader& other) = delete;
+        //VertexArray& operator=(VertexArray&& other) noexcept;
+
+    Shader(Shader&& other) noexcept;
+    Shader& operator=(Shader&& other) noexcept;
+
     ~Shader();
 
     bool LoadShaderSource(const std::string& vertexSource, const std::string& fragmentSource);

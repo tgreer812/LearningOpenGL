@@ -1,8 +1,48 @@
 #include "Shader.h"
 #include "Utils.h"
 
+// Move constructor
+Shader::Shader(Shader&& other) noexcept {
+    this->isCompiled = other.isCompiled;
+    this->fragmentSourceCode = std::move(other.fragmentSourceCode);
+    this->vertexSourceCode = std::move(other.vertexSourceCode);
+    this->programID = other.programID;
+    this->uniformLocations = std::move(other.uniformLocations);
+
+    other.isCompiled = false;
+    other.fragmentSourceCode = "";
+    other.vertexSourceCode = "";
+    other.programID = 0;
+    other.uniformLocations.clear();
+}
+
+// Move operator
+Shader& Shader::operator=(Shader&& other) noexcept {
+    
+    // Make sure weird shit doesn't happen
+    if (this == &other) { return *this; }
+
+    if (this->programID != 0) { GL_CALL(glDeleteProgram(this->programID)); }
+
+    this->isCompiled = other.isCompiled;
+    this->fragmentSourceCode = std::move(other.fragmentSourceCode);
+    this->vertexSourceCode = std::move(other.vertexSourceCode);
+    this->programID = other.programID;
+    this->uniformLocations = std::move(other.uniformLocations);
+
+    other.isCompiled = false;
+    other.fragmentSourceCode = "";
+    other.vertexSourceCode = "";
+    other.programID = 0;
+    other.uniformLocations.clear();
+
+    return *this;
+}
+
+
 Shader::~Shader() {
     if (programID != 0) {
+        std::cout << "WARNING: Deleting shader program!" << std::endl;
         GL_CALL(glDeleteProgram(programID));
     }
 }
