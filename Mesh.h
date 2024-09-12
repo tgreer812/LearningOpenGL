@@ -3,51 +3,74 @@
 #include "Material.h"
 #include "VertexArray.h"
 #include "Utils.h"
+#include "Camera.h"
+#include "Shader.h"
+#include "Material.h"
+#include <memory>  // Include smart pointers
 
-template <typename T>
 class Mesh {
 public:
-    Mesh(const T& geometry, Material& material)
-        : m_geometry(geometry), m_material(material) {
-        // Initialize VAO and buffers during construction
-        InitializeBuffers();
+    std::vector<float> Vertices, Colors, TextureCoords;
+    std::vector<unsigned int> Indices;
+    glm::mat4 m_modelMatrix;
+    
+    Camera m_camera;
+
+    Mesh(
+        std::vector<float> vertices,
+        std::vector<unsigned int> indices,
+        std::vector<float> colors,
+        std::vector<float> textureCoords,
+        glm::mat4 modelMatrix,
+        Material material,
+        Camera camera
+    ) : 
+        // Initializer list
+        Vertices(vertices), 
+        Colors(colors), 
+        TextureCoords(textureCoords), 
+        Indices(indices), 
+        m_material(material), 
+        m_camera(camera), 
+        m_modelMatrix(modelMatrix)
+    {
+        this->initialize();
     }
 
-    // Bind the material and VAO for drawing
+    // No copying of meshes allowed
+    Mesh(const Mesh& other) = delete;
+    Mesh& operator=(const Mesh&) = delete;
+
     unsigned int Bind() {
-        m_material.Use();    // Bind the material (and thus the shader)
+        this->m_material.Use();
+        this->m_material.GetShader().SetMat4("ModelMatrix", m_modelMatrix);
+        this->m_material.GetShader().SetMat4("ProjectionMatrix", m_camera.GetProjectionMatrix());
+        this->m_material.GetShader().SetMat4("ProjectionMatrix", m_camera.GetViewMatrix());
+        this->vertexArray.Bind();
 
-        // Just bind the pre-initialized VAO
-        va.Use();           // Bind the vertex array object (VAO)
-        return va.GetSize(); // Return the size of the indices (for draw call)
+        return this->Indices.size();
     }
 
-    T& GetGeometry() {
-        return m_geometry;
-    }
-
-    // Getter for the material
-    Material& GetMaterial() {
-        return m_material;
+    void Unbind() {
+        
+        this->vertexArray.Unbind();
     }
 
 private:
-    // Method to initialize the VAO, VBO, and EBO
-    void InitializeBuffers() {
-        std::vector<float> positions = m_geometry.GetVertexPositions();
-        std::vector<unsigned int> indices = m_geometry.GetIndices();
-        glm::vec3 color = m_material.GetVertexColor();
-
-        std::vector<float> vertexColors = Utils::FillVector3(color, positions.size() / 3);
-        std::vector<float> textureCoords = m_material.GetTextureCoords();
-
-        std::vector<float> vbo = Utils::CreateInterleavedVertexBuffer(positions, vertexColors, textureCoords);
-
-        // Initialize the vertex array (VAO) and buffers (VBO, EBO)
-        va = VertexArray(vbo, indices);
+    void initialize() {
+        std::vector<float> vbo = Utils::CreateInterleavedVertexBuffer(
+            this->Vertices,
+            this->Colors,
+            this->TextureCoords
+        );
+        
+        vertexArray = std::move(VertexArray(
+            vbo,
+            this->Indices
+        ));
     }
 
-    T m_geometry;
+    bool initialized = false;
+    VertexArray vertexArray;
     Material m_material;
-    VertexArray va;  // Store this as a member variable, initialized once
 };

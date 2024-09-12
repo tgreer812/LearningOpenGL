@@ -18,13 +18,13 @@ void Material::SetTexture(Texture2D texture) {
     this->m_texture = texture;
 }
 
-void Material::SetTextureCoords(std::vector<float> texCoords) {
-    this->m_texCoords = texCoords;
-}
+//void Material::SetTextureCoords(std::vector<float> texCoords) {
+//    this->m_texCoords = texCoords;
+//}
 
-std::vector<float> Material::GetTextureCoords() {
-    return this->m_texCoords;
-}
+//std::vector<float> Material::GetTextureCoords() {
+//    return this->m_texCoords;
+//}
 
 void Material::SetBlend(float blendFactor) {
     // Clamp the blend factor to be between 0.0f and 1.0f
@@ -37,7 +37,7 @@ void Material::Use() {
     if (this->m_useTexture) { 
         
         this->m_texture.Bind();
+        this->m_shader.SetInt("aTexture", this->m_texture.GetTextureUnit());
     }
-    this->m_shader.SetInt("aTexture", this->m_texture.GetTextureUnit());
     this->m_shader.SetFloat("blendFactor", this->m_blendFactor);
 }

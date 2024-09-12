@@ -15,7 +15,7 @@ public:
 
     // Setters
     void SetPosition(float x, float y, float z);
-    void SetRotation(float yaw, float pitch, float roll);
+    void SetRotation(glm::vec3 rot);
     void SetSize(float length, float width);
 
     // Getters
@@ -30,7 +30,6 @@ public:
     glm::mat4 GetModelMatrix() const;
 
 private:
-    VertexArray m_vertexArray;
     glm::vec3 m_position;
     glm::vec3 m_rotation;
     glm::vec2 m_size;

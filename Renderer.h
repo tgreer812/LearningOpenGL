@@ -15,24 +15,20 @@ public:
 	// and setting the uniforms to the user provided values
 	// and then this method can just call that
 	// for now though just going to do this since we only have one shader
-	template <typename T>
-	void Draw(Mesh<T>& mesh, glm::mat4& modelMatrix, glm::mat4& viewMatrix, glm::mat4& projectionMatrix) {
+	void Draw(Mesh &mesh) {
 		// Set camera uniforms
-		Shader shader = mesh.GetMaterial().GetShader();
-		shader.Bind();
-		shader.SetMat4("modelMatrix", modelMatrix);
-		shader.SetMat4("viewMatrix", viewMatrix);
-		shader.SetMat4("projectionMatrix", projectionMatrix);
 
 		unsigned int vaSize = mesh.Bind();
 
 		// Bind the vertex array
 		glDrawElements(
 			GL_TRIANGLES,			// Use triangle as primitive
-			vaSize,					// This gets the number of non-repeated vertices (i.e the indices)
+			vaSize,					// This gets the number of unique vertices
 			GL_UNSIGNED_INT,		// The 'type' of data
 			nullptr					// ptr to the indices - however we bind our index data to an index buffer, so we just specify nullptr
 		);
+
+		mesh.Unbind();
 	}
 
 private:

@@ -78,14 +78,19 @@ namespace Utils {
     {
         std::vector<float> interleavedBuffer;
 
+        std::cout << "Number of positions: " << vertexPositions.size() / 3 << std::endl;
+        std::cout << "Number of colors: " << vertexColors.size() / 3 << std::endl;
+        std::cout << "Number of texture coordinates: " << textureCoords.size() / 2 << std::endl;
+
+
         // Ensure all vectors are the same length (in terms of number of vertices)
-        size_t numVertices = vertexPositions.size() / 3; // 3 floats per position
+        unsigned int numVertices = vertexPositions.size() / 3; // 3 floats per position
         if (vertexColors.size() / 3 != numVertices || textureCoords.size() / 2 != numVertices) {
             throw std::runtime_error("Mismatch in vertex data sizes.");
         }
 
         // Interleave the data: position (3 floats), color (3 floats), texture coord (2 floats)
-        for (size_t i = 0; i < numVertices; i++) {
+        for (unsigned int i = 0; i < numVertices; i++) {
             // Add position (3 floats)
             interleavedBuffer.push_back(vertexPositions[i * 3 + 0]);
             interleavedBuffer.push_back(vertexPositions[i * 3 + 1]);
