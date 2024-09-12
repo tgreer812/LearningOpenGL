@@ -3,6 +3,7 @@
 #include "Material.h"
 #include "VertexArray.h"
 #include "glm/glm.hpp"
+#include "Utils.h"
 
 class Renderer
 {
@@ -21,12 +22,12 @@ public:
 		unsigned int vaSize = mesh.Bind();
 
 		// Bind the vertex array
-		glDrawElements(
+		GL_CALL(glDrawElements(
 			GL_TRIANGLES,			// Use triangle as primitive
-			vaSize,					// This gets the number of unique vertices
+			vaSize,						// This gets the number of unique vertices
 			GL_UNSIGNED_INT,		// The 'type' of data
 			nullptr					// ptr to the indices - however we bind our index data to an index buffer, so we just specify nullptr
-		);
+		));
 
 		mesh.Unbind();
 	}

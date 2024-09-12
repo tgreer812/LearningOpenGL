@@ -3,6 +3,26 @@
 #include <vector>
 
 namespace Utils {
+    void ClearGLErrors() {
+        GLenum err;
+        while ((err = glGetError()) != GL_NO_ERROR) {}
+    }
+
+    void CheckGLError(std::string functionName, std::string fileName, std::string lineno) {
+        GLenum err;
+        while ((err = glGetError()) != GL_NO_ERROR) {
+            std::cerr << fileName
+                << ":"
+                << functionName
+                << ":lineno:"
+                << lineno
+                << ": "
+                << "OpenGL error - "
+                << err;
+            __debugbreak();
+        }
+    }
+
     std::string readFile(const std::string& filePath) {
 	    std::ifstream file(filePath, std::ios::binary | std::ios::ate);
 

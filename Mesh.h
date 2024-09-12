@@ -42,11 +42,12 @@ public:
     Mesh& operator=(const Mesh&) = delete;
 
     unsigned int Bind() {
+        this->vertexArray.Bind();
         this->m_material.Use();
         this->m_material.GetShader().SetMat4("ModelMatrix", m_modelMatrix);
         this->m_material.GetShader().SetMat4("ProjectionMatrix", m_camera.GetProjectionMatrix());
         this->m_material.GetShader().SetMat4("ProjectionMatrix", m_camera.GetViewMatrix());
-        this->vertexArray.Bind();
+        
 
         return this->Indices.size();
     }

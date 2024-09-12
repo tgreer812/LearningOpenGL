@@ -5,8 +5,19 @@
 #include <iostream>
 #include <glm/glm.hpp>
 #include <vector>
+#include "glad/glad.h"
+
+#define GL_CALL(x) {                                                 \
+    Utils::ClearGLErrors();                                          \
+    x;                                                               \
+    Utils::CheckGLError(#x, __FILE__, std::to_string(__LINE__));     \
+}
 
 namespace Utils {
+
+    void ClearGLErrors();
+
+    void CheckGLError(std::string functionName, std::string fileName, std::string lineno);
 
     // Function to read a file's content into a string
     std::string readFile(const std::string& filePath);

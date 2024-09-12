@@ -1,16 +1,6 @@
 #include "VertexArray.h"
 #include <iostream>
-
-// This shit is fucked
-
-#define CHECK_GL_ERROR() {                                      \
-    GLenum err;                                                 \
-    while((err = glGetError()) != GL_NO_ERROR) {                \
-        std::cerr << "OpenGL error: " << err                    \
-                  << " in file " << __FILE__                    \
-                  << " at line " << __LINE__ << std::endl;      \
-    }                                                           \
-}
+#include "Utils.h"
 
 // Default constructor
 VertexArray::VertexArray()
@@ -27,9 +17,9 @@ VertexArray::VertexArray(const std::vector<float>& vertices, const std::vector<u
 // Allow moving of VertexArray
 VertexArray::VertexArray(VertexArray&& other) noexcept {
     // If this VertexArray was already being used then free its underlying vertex array
-    if (VAO != 0) { glDeleteVertexArrays(1, &this->VAO); }
-    if (VBO != 0) { glDeleteBuffers(1, &VBO); }
-    if (EBO != 0) { glDeleteBuffers(1, &EBO); }
+    if (VAO != 0) { GL_CALL(glDeleteVertexArrays(1, &this->VAO)); }
+    if (VBO != 0) { GL_CALL(glDeleteBuffers(1, &VBO)); }
+    if (EBO != 0) { GL_CALL(glDeleteBuffers(1, &EBO)); }
 
     // Now make it take control of the other vertex array
     this->VAO = other.VAO;
@@ -39,7 +29,7 @@ VertexArray::VertexArray(VertexArray&& other) noexcept {
     m_indices = std::move(other.m_indices);
 
     other.VAO = 0;
-    other.VBO = 0; 
+    other.VBO = 0;
     other.EBO = 0;
 
     other.m_vertices.clear();
@@ -50,13 +40,13 @@ VertexArray& VertexArray::operator=(VertexArray&& other) noexcept {
     if (this != &other) {
         // Free the current VAO, VBO, and EBO to avoid resource leaks
         if (VAO != 0) {
-            glDeleteVertexArrays(1, &VAO);
+            GL_CALL(glDeleteVertexArrays(1, &VAO));
         }
         if (VBO != 0) {
-            glDeleteBuffers(1, &VBO);
+            GL_CALL(glDeleteBuffers(1, &VBO));
         }
         if (EBO != 0) {
-            glDeleteBuffers(1, &EBO);
+            GL_CALL(glDeleteBuffers(1, &EBO));
         }
 
         // Transfer ownership of resources
@@ -92,17 +82,15 @@ void VertexArray::Bind() {
         BufferData();  // If data hasn't been buffered yet, buffer it now
     }
 
-    glBindVertexArray(VAO);  // Bind the VAO for use
-    CHECK_GL_ERROR();  // Check for errors after binding the VAO
+    GL_CALL(glBindVertexArray(VAO));  // Bind the VAO for use
 }
 
 void VertexArray::Unbind() {
     GLint currentlyBoundVAO = 0;
-    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &currentlyBoundVAO);
+    GL_CALL(glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &currentlyBoundVAO));
 
-    if (currentlyBoundVAO == VAO)
-    {
-        glBindVertexArray(0);
+    if (currentlyBoundVAO == VAO) {
+        GL_CALL(glBindVertexArray(0));
     }
     else {
         std::cout << "WARNING: Attempted to bind a VertexArray that is not bound!" << std::endl;
@@ -119,15 +107,14 @@ void VertexArray::UpdateData(const std::vector<float>& vertices, const std::vect
 // Clear out the buffers and reset flags
 void VertexArray::Clear() {
     // Delete OpenGL buffers
-    if (VAO) glDeleteVertexArrays(1, &VAO);
-    if (VBO) glDeleteBuffers(1, &VBO);
-    if (EBO) glDeleteBuffers(1, &EBO);
+    if (VAO) GL_CALL(glDeleteVertexArrays(1, &VAO));
+    if (VBO) GL_CALL(glDeleteBuffers(1, &VBO));
+    if (EBO) GL_CALL(glDeleteBuffers(1, &EBO));
 
     VAO = 0;
     VBO = 0;
     EBO = 0;
     dataBuffered = false;  // Reset the buffered flag
-    CHECK_GL_ERROR();  // Check for errors after deleting buffers
 
     this->m_vertices.clear();
     this->m_indices.clear();
@@ -136,47 +123,37 @@ void VertexArray::Clear() {
 // Internal method to buffer vertex and index data to GPU
 void VertexArray::BufferData() {
     if (!VAO) {
-        glGenVertexArrays(1, &VAO);
-        glGenBuffers(1, &VBO);
-        glGenBuffers(1, &EBO);
-        CHECK_GL_ERROR();  // Check for errors after generating buffers
+        GL_CALL(glGenVertexArrays(1, &VAO));
+        GL_CALL(glGenBuffers(1, &VBO));
+        GL_CALL(glGenBuffers(1, &EBO));
     }
 
-    glBindVertexArray(VAO);
-    CHECK_GL_ERROR();  // Check for errors after binding VAO
+    GL_CALL(glBindVertexArray(VAO));
 
     // Buffer vertex data into VBO
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    CHECK_GL_ERROR();  // Check for errors after binding VBO
+    GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, VBO));
 
-    glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(float), m_vertices.data(), GL_STATIC_DRAW);
-    CHECK_GL_ERROR();  // Check for errors after buffering vertex data
+    GL_CALL(glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(float), m_vertices.data(), GL_STATIC_DRAW));
 
     // Buffer index data into EBO
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    CHECK_GL_ERROR();  // Check for errors after binding EBO
+    GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
 
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), GL_STATIC_DRAW);
-    CHECK_GL_ERROR();  // Check for errors after buffering index data
+    GL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), GL_STATIC_DRAW));
 
     // Set vertex attribute pointers
     // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    CHECK_GL_ERROR();  // Check for errors after setting the position attribute
+    GL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0));
+    GL_CALL(glEnableVertexAttribArray(0));
 
     // Color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    CHECK_GL_ERROR();  // Check for errors after setting the color attribute
+    GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))));
+    GL_CALL(glEnableVertexAttribArray(1));
 
     // Texture attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-    CHECK_GL_ERROR();  // Check for errors after setting the texture attribute
+    GL_CALL(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))));
+    GL_CALL(glEnableVertexAttribArray(2));
 
-    glBindVertexArray(0);  // Unbind VAO after setup
-    CHECK_GL_ERROR();  // Check for errors after unbinding VAO
+    GL_CALL(glBindVertexArray(0));  // Unbind VAO after setup
 
     dataBuffered = true;  // Set the buffered flag to true
 }
