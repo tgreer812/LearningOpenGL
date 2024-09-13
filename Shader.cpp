@@ -113,6 +113,7 @@ bool Shader::Compile() {
     }
 
     PostLink();
+    isCompiled = true;
     return true;
 }
 

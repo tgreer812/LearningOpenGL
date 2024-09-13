@@ -13,27 +13,34 @@ public:
     std::vector<float> Vertices, Colors, TextureCoords;
     std::vector<unsigned int> Indices;
     glm::mat4 m_modelMatrix;
+    //glm::mat4 m_projectionMatrix;
+    //glm::mat4 m_viewMatrix;
     
     Camera* m_camera;
 
     Mesh(
-        const std::vector<float> vertices,
-        const std::vector<unsigned int> indices,
-        const std::vector<float> colors,
-        const std::vector<float> textureCoords,
-        const glm::mat4 modelMatrix,
-        Material &material,
-        Camera &camera
+        const std::vector<float>& vertices,
+        const std::vector<unsigned int>& indices,
+        const std::vector<float>& colors,
+        const std::vector<float>& textureCoords,
+        const glm::mat4& modelMatrix,
+        Camera* camera,
+        //const glm::mat4& projectionMatrix,
+        //const glm::mat4& viewMatrix,
+        Material* material
     ) : 
         // Initializer list
         Vertices(vertices), 
         Colors(colors), 
         TextureCoords(textureCoords), 
         Indices(indices), 
-        m_camera(&camera), 
-        m_modelMatrix(modelMatrix)
+        m_modelMatrix(modelMatrix),
+        m_camera(camera),
+        //m_projectionMatrix(projectionMatrix),
+        //m_viewMatrix(viewMatrix),
+        m_material(material)
     {
-        m_material = std::move(material);
+        
         this->initialize();
     }
 
@@ -42,11 +49,15 @@ public:
     Mesh& operator=(const Mesh&) = delete;
 
     unsigned int Bind() {
+
+        if (!this->initialized) {
+            std::cout << "WARNING: Mesh not initialized!" << std::endl;
+        }
         
-        this->m_material.Use();
-        this->m_material.m_shader.SetMat4("ModelMatrix", m_modelMatrix);
-        this->m_material.m_shader.SetMat4("ProjectionMatrix", m_camera->GetProjectionMatrix());
-        this->m_material.m_shader.SetMat4("ViewMatrix", m_camera->GetViewMatrix());
+        this->m_material->Use();
+        this->m_material->m_shader.SetMat4("modelMatrix", m_modelMatrix);
+        this->m_material->m_shader.SetMat4("projectionMatrix", m_camera->GetProjectionMatrix());
+        this->m_material->m_shader.SetMat4("viewMatrix", m_camera->GetViewMatrix());
         this->vertexArray.Bind();
         
 
@@ -58,7 +69,7 @@ public:
         this->vertexArray.Unbind();
     }
 
-private:
+//private:
     void initialize() {
         std::vector<float> vbo = Utils::CreateInterleavedVertexBuffer(
             this->Vertices,
@@ -70,9 +81,10 @@ private:
             vbo,
             this->Indices
         ));
+        this->initialized = true;
     }
 
     bool initialized = false;
     VertexArray vertexArray;
-    Material m_material;
+    Material* m_material;
 };

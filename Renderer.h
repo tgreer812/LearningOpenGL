@@ -4,10 +4,12 @@
 #include "VertexArray.h"
 #include "glm/glm.hpp"
 #include "Utils.h"
+#include "Camera.h"
 
 class Renderer
 {
 public:
+
 	Renderer() {}
 
 	// TODO: make this use materials instead of shaders

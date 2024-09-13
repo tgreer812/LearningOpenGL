@@ -331,24 +331,17 @@ int main() {
     // Apply translation to move the cube further back into the camera's view
     //modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, -5.0f));
 
-    //Mesh testBlock(
-    //    triangleModel.Vertices,
-    //    triangleModel.Indices,
-    //    triangleModel.Colors,
-    //    triangleModel.TextureCoords,
-    //    modelMatrix,
-    //    grassSideMat,
-    //    *activeCamera
-    //);
-
-    const std::vector<float> vbo(Utils::CreateInterleavedVertexBuffer(
+    Mesh testBlock(
         triangleModel.Vertices,
+        triangleModel.Indices,
         triangleModel.Colors,
-        triangleModel.TextureCoords
-    ));
-    VertexArray va(vbo, triangleModel.Indices);
+        triangleModel.TextureCoords,
+        modelMatrix,
+        activeCamera,
+        &grassSideMat
+    );
 
-    //Renderer renderer = Renderer();
+    Renderer renderer = Renderer();
 
     glEnable(GL_DEPTH_TEST);
 
@@ -360,44 +353,8 @@ int main() {
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        grassSideMat.Use();
-        grassSideMat.m_shader.SetMat4("modelMatrix", modelMatrix);
-        grassSideMat.m_shader.SetMat4("projectionMatrix", activeCamera->GetProjectionMatrix());
-        grassSideMat.m_shader.SetMat4("viewMatrix", activeCamera->GetViewMatrix());
-
-        /*shader.Bind();
-        shader.SetBool("useTexture", false);
-        glm::mat4 modelMatrix(1.0f);
-        shader.SetMat4("modelMatrix", modelMatrix);
-        shader.SetMat4("projectionMatrix", activeCamera->GetProjectionMatrix());
-        shader.SetMat4("viewMatrix", activeCamera->GetViewMatrix());*/
-        va.Bind();
-
-        // Bind the vertex array
-        GL_CALL(glDrawElements(
-            GL_TRIANGLES,			// Use triangle as primitive
-            36,				    // This gets the number of unique vertices
-            GL_UNSIGNED_INT,		// The 'type' of data
-            nullptr					// ptr to the indices - however we bind our index data to an index buffer, so we just specify nullptr
-        ));
-
-        //renderer.Draw(testBlock);
-
-        //glm::mat4 modelMatrix1 = planeMesh1.GetGeometry().GetModelMatrix();
-        
-        // this will eventually get replaced with looping through
-        // all models in the scene
-        //bool first = true;
-        //for (auto& curPlane : planeMeshes) {
-        //    //if (!first) { first = false; break; }
-        //    glm::mat4 modelMatrix = curPlane.GetGeometry().GetModelMatrix();
-        //    renderer.Draw<Plane>(curPlane, modelMatrix, viewMatrix, projectionMatrix);
-
-        //    GLenum error = glGetError();
-        //    if (error != GL_NO_ERROR) {
-        //        std::cout << "OpenGL Error: " << error << std::endl;
-        //    }
-        //}
+        //renderer.camera = activeCamera;
+        renderer.Draw(testBlock);
 
         // Swap buffers and poll events
         glfwSwapBuffers(Window);

@@ -14,6 +14,7 @@ public:
     Shader() : programID(0) {}
     Shader(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath) : programID(0) {
         LoadShaderFiles(vertexShaderFilePath, fragmentShaderFilePath);
+        Compile();
     }
 
     Shader(const Shader& other) = delete;

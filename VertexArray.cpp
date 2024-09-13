@@ -27,6 +27,7 @@ VertexArray::VertexArray(VertexArray&& other) noexcept {
     this->EBO = other.EBO;
     m_vertices = std::move(other.m_vertices);
     m_indices = std::move(other.m_indices);
+    dataBuffered = other.dataBuffered;
 
     other.VAO = 0;
     other.VBO = 0;
@@ -34,6 +35,7 @@ VertexArray::VertexArray(VertexArray&& other) noexcept {
 
     other.m_vertices.clear();
     other.m_indices.clear();
+    other.dataBuffered = false;
 }
 
 VertexArray& VertexArray::operator=(VertexArray&& other) noexcept {
@@ -55,6 +57,7 @@ VertexArray& VertexArray::operator=(VertexArray&& other) noexcept {
         EBO = other.EBO;
         m_vertices = std::move(other.m_vertices);
         m_indices = std::move(other.m_indices);
+        dataBuffered = other.dataBuffered;
 
         // Reset the other object to a valid but empty state
         other.VAO = 0;
@@ -62,6 +65,7 @@ VertexArray& VertexArray::operator=(VertexArray&& other) noexcept {
         other.EBO = 0;
         other.m_vertices.clear();
         other.m_indices.clear();
+        other.dataBuffered = false;
     }
     return *this;
 }
@@ -107,9 +111,15 @@ void VertexArray::UpdateData(const std::vector<float>& vertices, const std::vect
 // Clear out the buffers and reset flags
 void VertexArray::Clear() {
     // Delete OpenGL buffers
-    if (VAO) GL_CALL(glDeleteVertexArrays(1, &VAO));
-    if (VBO) GL_CALL(glDeleteBuffers(1, &VBO));
-    if (EBO) GL_CALL(glDeleteBuffers(1, &EBO));
+    if (VAO) {
+        GL_CALL(glDeleteVertexArrays(1, &VAO));
+    }
+    if (VBO) {
+        GL_CALL(glDeleteBuffers(1, &VBO));
+    }
+    if (EBO) {
+        GL_CALL(glDeleteBuffers(1, &EBO));
+    }
 
     VAO = 0;
     VBO = 0;
