@@ -14,6 +14,7 @@ Texture2D::Texture2D(const std::string path) : Texture2D(path, 4) {}
 // Constructor
 Texture2D::Texture2D(const std::string path, int channels) {
     int x, y, comp;
+    stbi_set_flip_vertically_on_load(true);
     stbi_uc* buf = stbi_load(
         path.c_str(),
         &x,

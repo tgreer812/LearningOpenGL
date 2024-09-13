@@ -169,8 +169,8 @@ int main() {
     Shader shader(vertexShaderSource, textureShaderSource);
     //Shader shader2 = Shader(vertexShaderSource, textureShaderSource);
 
-    Texture2D marbleSideTex = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FlatMarbleTexture.png");
-    //Texture2D grassSideTex = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\GrassBlockSide.png");
+    //Texture2D marbleSideTex = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FlatMarbleTexture.png");
+    Texture2D grassSideTex = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\GrassBlockSide.png");
 
     Camera camera = Camera();
     activeCamera = &camera;
@@ -186,8 +186,8 @@ int main() {
     Utils::printMat4(camera.GetViewMatrix());
 
     Material grassSideMat(shader);
-    grassSideMat.SetTexture(marbleSideTex);
-    grassSideMat.SetBlend(0.5f);
+    grassSideMat.SetTexture(grassSideTex);
+    grassSideMat.SetBlend(1.0f);
      
     // Create a model matrix for the cube
     glm::mat4 modelMatrix(1.0f);  // Initialize as identity matrix
