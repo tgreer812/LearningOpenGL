@@ -11,6 +11,9 @@
 #include "Camera.h"
 #include "Plane.h"
 #include "Renderer.h"
+#include "Mesh.h"
+#include "Material.h"
+#include "SimpleModel.h"
 
 bool wireframe = false;
 
@@ -144,52 +147,36 @@ void init() {
     glfwSetCursorPosCallback(Window, handleMouseEvent);
 }
 
-std::vector<float> CreateInterleavedVertexBuffer(
-    const std::vector<float>& vertexPositions,
-    const std::vector<float>& vertexColors,
-    const std::vector<float>& textureCoords)
-{
-    std::vector<float> interleavedBuffer;
-
-    // Ensure all vectors are the same length (in terms of number of vertices)
-    size_t numVertices = vertexPositions.size() / 3; // 3 floats per position
-    if (vertexColors.size() / 3 != numVertices || textureCoords.size() / 2 != numVertices) {
-        throw std::runtime_error("Mismatch in vertex data sizes.");
-    }
-
-    // Interleave the data: position (3 floats), color (3 floats), texture coord (2 floats)
-    for (size_t i = 0; i < numVertices; i++) {
-        // Add position (3 floats)
-        interleavedBuffer.push_back(vertexPositions[i * 3 + 0]);
-        interleavedBuffer.push_back(vertexPositions[i * 3 + 1]);
-        interleavedBuffer.push_back(vertexPositions[i * 3 + 2]);
-
-        // Add color (3 floats)
-        interleavedBuffer.push_back(vertexColors[i * 3 + 0]);
-        interleavedBuffer.push_back(vertexColors[i * 3 + 1]);
-        interleavedBuffer.push_back(vertexColors[i * 3 + 2]);
-
-        // Add texture coordinates (2 floats)
-        interleavedBuffer.push_back(textureCoords[i * 2 + 0]);
-        interleavedBuffer.push_back(textureCoords[i * 2 + 1]);
-    }
-
-    return interleavedBuffer;
-}
-
 int main() {
     init();
 
     // Load shaders
     std::string vertexShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\VertexShader.glsl";
     std::string textureShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FragmentShader.glsl";
+    std::string simpleVertexShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\SimpleVertexShader.glsl";
+    std::string simpleFragmentShaderSource = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\SimpleFragmentShader.glsl";
+    std::string triangleModelFile = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\Triangle.smodel";
+    std::string cubeModelFile = "C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\Cube.smodel";
 
-    Shader shader = Shader(vertexShaderSource, textureShaderSource);
+    // Load triangle model
+    SimpleModel triangleModel(cubeModelFile);
 
-    Texture2D testTexture = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FlatMarbleTexture.png");
+    if (!triangleModel.modelLoaded) { std::cout << "Failed to load model!" << std::endl; return -1; }
+
+
+
+    //Shader simpleShader = Shader(simpleVertexShaderSource, simpleFragmentShaderSource);
+    Shader shader(vertexShaderSource, textureShaderSource);
+    //Shader shader2 = Shader(vertexShaderSource, textureShaderSource);
+
+    Texture2D marbleSideTex = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FlatMarbleTexture.png");
+    //Texture2D grassSideTex = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\GrassBlockSide.png");
 
     Camera camera = Camera();
     activeCamera = &camera;
+
+    // Enable depth testing
+    //glEnable(GL_DEPTH_TEST);
 
     // print out camera details
     std::cout << "Projection Matrix:" << std::endl;
@@ -198,57 +185,44 @@ int main() {
     std::cout << "View Matrix:" << std::endl;
     Utils::printMat4(camera.GetViewMatrix());
 
+    Material grassSideMat(shader);
+    grassSideMat.SetTexture(marbleSideTex);
+    grassSideMat.SetBlend(0.5f);
+     
+    // Create a model matrix for the cube
+    glm::mat4 modelMatrix(1.0f);  // Initialize as identity matrix
 
-    // Initialize Plane2D with the shader and texture
-    Plane plane = Plane(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0, 1.0);
+    // Apply scaling transformation to make the cube 5x5x5
+    // does this need to be a vec4?
+    //modelMatrix = glm::scale(modelMatrix, glm::vec3(5.0f, 5.0f, 5.0f));
 
-    std::vector<float> vertexPositions = plane.GetVertexPositions();
-    
-    // For now just make the colors white
-    // should probably get this from a 'material' going forward
-    std::vector<float> vertexColors = {
-        0.0f, 0.5f, 0.0f,
-        0.0f, 0.5f, 0.0f,
-        0.0f, 0.5f, 0.0f,
-        0.0f, 0.5f, 0.0f,
-    };
+    // Apply translation to move the cube further back into the camera's view
+    //modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, -5.0f));
 
-    // would probably also get this from a material?
-    std::vector<float> textureCoords = {
-        0.0f, 1.0f,         // top left
-        1.0f, 1.0f,         // top right
-        0.0f, 0.0f,         // bottom left
-        1.0f, 0.0f,         // bottom right
-    };
-
-    std::vector<float> vertexBuffer = CreateInterleavedVertexBuffer(vertexPositions, vertexColors, textureCoords);
-    
-    // debug
-    /*for (auto v : vertexBuffer) {
-        std::cout << v;
-    }
-    std::cout << std::endl;*/
-
-    // Create a vertex array
-    VertexArray va = VertexArray(vertexBuffer, plane.GetIndices());
+    Mesh testBlock(
+        triangleModel.Vertices,
+        triangleModel.Indices,
+        triangleModel.Colors,
+        triangleModel.TextureCoords,
+        modelMatrix,
+        activeCamera,
+        &grassSideMat
+    );
 
     Renderer renderer = Renderer();
 
-    // TODO: remove this
-    //activeCamera->Disable();
-    std::cout << "Model Matrix:" << std::endl;
-    Utils::printMat4(plane.GetModelMatrix());
+    glEnable(GL_DEPTH_TEST);
 
     // Graphics loop
     while (!glfwWindowShouldClose(Window)) {
+        
+
         // Clear the screen with the background color
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glm::mat4 modelMatrix = plane.GetModelMatrix();
-        glm::mat4 viewMatrix = camera.GetViewMatrix();
-        glm::mat4 projectionMatrix = camera.GetProjectionMatrix();
-        renderer.Draw(shader, va, modelMatrix, viewMatrix, projectionMatrix);
+        //renderer.camera = activeCamera;
+        renderer.Draw(testBlock);
 
         // Swap buffers and poll events
         glfwSwapBuffers(Window);

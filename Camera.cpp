@@ -97,9 +97,9 @@ void Camera::SetAspectRatio(float aspectRatio) {
 	this->m_aspectRatio = aspectRatio;
 }
 
-void Camera::SetViewDistance(float viewDistance) {
-	this->m_viewDistance;
-}
+//void Camera::SetViewDistance(float viewDistance) {
+//	this->m_viewDistance;
+//}
 
 glm::mat4 Camera::GetViewMatrix() {
 	_calculateViewMatrix();

@@ -4,8 +4,20 @@
 #include <fstream>
 #include <iostream>
 #include <glm/glm.hpp>
+#include <vector>
+#include "glad/glad.h"
+
+#define GL_CALL(x) {                                                 \
+    Utils::ClearGLErrors();                                          \
+    x;                                                               \
+    Utils::CheckGLError(#x, __FILE__, std::to_string(__LINE__));     \
+}
 
 namespace Utils {
+
+    void ClearGLErrors();
+
+    void CheckGLError(std::string functionName, std::string fileName, std::string lineno);
 
     // Function to read a file's content into a string
     std::string readFile(const std::string& filePath);
@@ -21,5 +33,18 @@ namespace Utils {
 
     // Utility to print glm::mat4
     void printMat4(const glm::mat4& m);
+
+    void printVector(const std::vector<float>& vec);
+
+    std::vector<float> CreateInterleavedVertexBuffer(
+        const std::vector<float>& vertexPositions,
+        const std::vector<float>& vertexColors,
+        const std::vector<float>& textureCoords
+    );
+
+    /**
+    * Returns a vector of floats created by replicating the color parameter fillSize times
+    **/
+    std::vector<float> FillVector3(glm::vec3 color, unsigned int fillSize);
 
 }

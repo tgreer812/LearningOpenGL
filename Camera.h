@@ -9,12 +9,12 @@ class Camera
 public:
 	Camera();
 	Camera(glm::vec3 position);
-	Camera(glm::vec3 position, glm::vec3 orientation);
+	//Camera(glm::vec3 position, glm::vec3 orientation);
 
 	void Move(glm::vec3 translation, float deltaTime);
 	void Rotate(float xoffset, float yoffset);
 	void SetAspectRatio(float aspectRatio);
-	void SetViewDistance(float viewDistance);
+	//void SetViewDistance(float viewDistance);
 
 	bool Enabled() { return this->m_cameraEnabled; }
 	void Enable() { this->m_cameraEnabled = true; }
@@ -28,7 +28,7 @@ public:
 
 private:
 	float m_fov;
-	float m_viewDistance;
+	//float m_viewDistance;
 	float m_aspectRatio = 1.0f;
 	float m_cameraSpeed = 5.0f;
 	float m_lookSensitivity = 0.1f;

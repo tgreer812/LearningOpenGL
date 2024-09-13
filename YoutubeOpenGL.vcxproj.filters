@@ -42,20 +42,17 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Plane2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureShader.cpp">
-      <Filter>Source Files\ShaderClasses</Filter>
-    </ClCompile>
-    <ClCompile Include="ColorShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files\ShaderClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Plane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleModel.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -65,21 +62,10 @@
     <None Include="Resources\FragmentShader.glsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="Resources\FragmentShaderUniform.glsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="Resources\FragmentShader2.glsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="Resources\FragmentShaderInputColor.glsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="Resources\FragmentTextureShader.glsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="TextureShader.glsl">
-      <Filter>Resource Files\Textures</Filter>
-    </None>
+    <None Include="Resources\SimpleFragmentShader.glsl" />
+    <None Include="Resources\SimpleVertexShader.glsl" />
+    <None Include="Resources\Cube.smodel" />
+    <None Include="Resources\Triangle.smodel" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -91,9 +77,6 @@
     <ClInclude Include="VertexArray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stb_image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Texture2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -103,22 +86,34 @@
     <ClInclude Include="Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Plane2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ColorShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Shader.h">
       <Filter>Source Files\ShaderClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Geometry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\include\stb_image\stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleModel.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\FlatMarbleTexture.png">
       <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Resources\GrassBlockSide.png">
+      <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
 </Project>

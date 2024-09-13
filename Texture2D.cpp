@@ -3,7 +3,9 @@
 #include <iostream>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image/stb_image.h"
+#include "Utils.h"
 
+Texture2D::Texture2D() {}
 Texture2D::Texture2D(const std::string path) : Texture2D(path, 4) {}
 
 // For now store the image in memory
@@ -29,18 +31,18 @@ Texture2D::Texture2D(const std::string path, int channels) {
     this->m_width = x;
     this->m_height = y;
 
-    // Generate and bind texture ID here
-    glGenTextures(1, &m_textureID);
-    glBindTexture(GL_TEXTURE_2D, m_textureID);
+    // Generate and bind texture ID using GL_CALL
+    GL_CALL(glGenTextures(1, &m_textureID));
+    GL_CALL(glBindTexture(GL_TEXTURE_2D, m_textureID));
 
     // Set texture parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+    GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+    GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+    GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
 
     // Upload texture data
-    glTexImage2D(
+    GL_CALL(glTexImage2D(
         GL_TEXTURE_2D,
         0,
         GL_RGBA,  // Assuming 4 channels for internal format
@@ -50,10 +52,12 @@ Texture2D::Texture2D(const std::string path, int channels) {
         GL_RGBA,  // Format should match the number of channels in m_buffer
         GL_UNSIGNED_BYTE,
         this->m_buffer.data()
-    );
+    ));
 
-    glGenerateMipmap(GL_TEXTURE_2D); // Optionally generate mipmaps
+    // Optionally generate mipmaps
+    GL_CALL(glGenerateMipmap(GL_TEXTURE_2D));
 }
+
 
 // Bind method
 void Texture2D::Bind() {
@@ -62,8 +66,9 @@ void Texture2D::Bind() {
         return;
     }
 
-    glActiveTexture(GL_TEXTURE0); // Activate texture unit 0
-    glBindTexture(GL_TEXTURE_2D, m_textureID); // Bind the texture ID generated earlier
+    GL_CALL(glActiveTexture(GL_TEXTURE0)); // Activate texture unit 0
+    GL_CALL(glBindTexture(GL_TEXTURE_2D, m_textureID)); // Bind the texture ID generated earlier
+    this->m_textureUnit = 0;
 }
 
 
@@ -74,3 +79,7 @@ int Texture2D::GetHeight() { return this->m_height; }
 BYTE* Texture2D::GetBuffer() { return (BYTE*)this->m_buffer.data(); }
 
 int Texture2D::GetSize() { return this->m_buffer.size(); }
+
+unsigned int Texture2D::GetTextureUnit() { 
+    return this->m_textureUnit; 
+}

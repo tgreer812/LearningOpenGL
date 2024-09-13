@@ -1,0 +1,17 @@
+# Vertices (x, y, z)
+v -0.5 -0.5  0.0
+v  0.5 -0.5  0.0
+v  0.0  0.5  0.0
+
+# Indices
+i 0 1 2
+
+# Colors (r, g, b)
+c  1.0  1.0  1.0
+c  1.0  1.0  1.0
+c  0.0  0.0  0.0
+
+# Texture Coordinates (u, v)
+t -1.0 -1.0
+t  1.0 -1.0
+t  0.0  1.0

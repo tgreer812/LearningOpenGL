@@ -14,7 +14,7 @@ Plane::Plane(float x, float y, float z, float yaw, float pitch, float roll, floa
 
 // Setters
 void Plane::SetPosition(float x, float y, float z) { this->m_position = glm::vec3(x, y, z); }
-void Plane::SetRotation(float yaw, float pitch, float roll) { this->m_rotation = glm::vec3(yaw, pitch, roll); }
+void Plane::SetRotation(glm::vec3 rot) { this->m_rotation = rot; }
 void Plane::SetSize(float length, float width) { this->m_size = glm::vec2(length, width); }
 
 // Getters
