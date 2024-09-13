@@ -359,7 +359,6 @@ int main() {
         // Clear the screen with the background color
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        //glClear(GL_COLOR_BUFFER_BIT);
 
         grassSideMat.Use();
         grassSideMat.m_shader.SetMat4("modelMatrix", modelMatrix);
