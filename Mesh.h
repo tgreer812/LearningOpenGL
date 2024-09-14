@@ -12,10 +12,7 @@ class Mesh {
 public:
     std::vector<float> Vertices, Colors, TextureCoords;
     std::vector<unsigned int> Indices;
-    glm::mat4 m_modelMatrix;
-    //glm::mat4 m_projectionMatrix;
-    //glm::mat4 m_viewMatrix;
-    
+    glm::mat4 m_modelMatrix;        
     Camera* m_camera;
 
     Mesh(
@@ -27,7 +24,7 @@ public:
         Camera* camera,
         //const glm::mat4& projectionMatrix,
         //const glm::mat4& viewMatrix,
-        Material* material
+        std::shared_ptr<Material> material
     ) : 
         // Initializer list
         Vertices(vertices), 
@@ -45,8 +42,14 @@ public:
     }
 
     // No copying of meshes allowed
-    Mesh(const Mesh& other) = delete;
-    Mesh& operator=(const Mesh&) = delete;
+    //Mesh(const Mesh& other) = delete;
+    //Mesh& operator=(const Mesh&) = delete;
+
+    // Move constructors
+    //Mesh(Mesh&& other) noexcept {
+
+    //}
+    //Mesh& operator=(Mesh&& other) noexcept;
 
     unsigned int Bind() {
 
@@ -55,10 +58,10 @@ public:
         }
         
         this->m_material->Use();
-        this->m_material->m_shader.SetMat4("modelMatrix", m_modelMatrix);
-        this->m_material->m_shader.SetMat4("projectionMatrix", m_camera->GetProjectionMatrix());
-        this->m_material->m_shader.SetMat4("viewMatrix", m_camera->GetViewMatrix());
-        this->vertexArray.Bind();
+        this->m_material->m_shader->SetMat4("modelMatrix", m_modelMatrix);
+        this->m_material->m_shader->SetMat4("projectionMatrix", m_camera->GetProjectionMatrix());
+        this->m_material->m_shader->SetMat4("viewMatrix", m_camera->GetViewMatrix());
+        this->m_vertexArray->Bind();
         
 
         return this->Indices.size();
@@ -66,10 +69,10 @@ public:
 
     void Unbind() {
         
-        this->vertexArray.Unbind();
+        this->m_vertexArray->Unbind();
     }
 
-//private:
+private:
     void initialize() {
         std::vector<float> vbo = Utils::CreateInterleavedVertexBuffer(
             this->Vertices,
@@ -77,7 +80,7 @@ public:
             this->TextureCoords
         );
         
-        vertexArray = std::move(VertexArray(
+        m_vertexArray = std::make_shared<VertexArray>(VertexArray(
             vbo,
             this->Indices
         ));
@@ -85,6 +88,7 @@ public:
     }
 
     bool initialized = false;
-    VertexArray vertexArray;
-    Material* m_material;
+    std::shared_ptr<VertexArray> m_vertexArray;
+    //Material* m_material;
+    std::shared_ptr<Material> m_material;
 };

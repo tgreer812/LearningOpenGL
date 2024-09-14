@@ -6,8 +6,8 @@
 * WARNING: This moves the supplied shader into a member variable! Do not attempt to use the supplied shader
 * after the fact!
 */
-Material::Material(Shader &shader) : m_useTexture(false), m_blendFactor(0.0), m_vertexColor(1.0, 1.0, 1.0) {
-    this->m_shader = std::move(shader);
+Material::Material(std::shared_ptr<Shader> shader) : m_useTexture(false), m_blendFactor(0.0), m_vertexColor(1.0, 1.0, 1.0) {
+    this->m_shader = shader;
 }
 
 glm::vec3 Material::GetVertexColor() { return this->m_vertexColor; }
@@ -36,12 +36,12 @@ void Material::SetBlend(float blendFactor) {
 }
 
 void Material::Use() {
-    this->m_shader.Bind();
-    this->m_shader.SetBool("useTexture", this->m_useTexture);
+    this->m_shader->Bind();
+    this->m_shader->SetBool("useTexture", this->m_useTexture);
     if (this->m_useTexture) { 
         
         this->m_texture.Bind();
-        this->m_shader.SetInt("aTexture", this->m_texture.GetTextureUnit());
+        this->m_shader->SetInt("aTexture", this->m_texture.GetTextureUnit());
     }
-    this->m_shader.SetFloat("blendFactor", this->m_blendFactor);
+    this->m_shader->SetFloat("blendFactor", this->m_blendFactor);
 }

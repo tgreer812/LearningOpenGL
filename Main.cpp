@@ -166,7 +166,7 @@ int main() {
 
 
     //Shader simpleShader = Shader(simpleVertexShaderSource, simpleFragmentShaderSource);
-    Shader shader(vertexShaderSource, textureShaderSource);
+    std::shared_ptr<Shader> shader = std::make_shared<Shader>(Shader(vertexShaderSource, textureShaderSource));
     //Shader shader2 = Shader(vertexShaderSource, textureShaderSource);
 
     //Texture2D marbleSideTex = Texture2D("C:\\Users\\tgree\\source\\repos\\LearningOpenGL\\Resources\\FlatMarbleTexture.png");
@@ -185,29 +185,36 @@ int main() {
     std::cout << "View Matrix:" << std::endl;
     Utils::printMat4(camera.GetViewMatrix());
 
-    Material grassSideMat(shader);
-    grassSideMat.SetTexture(grassSideTex);
-    grassSideMat.SetBlend(1.0f);
-     
-    // Create a model matrix for the cube
-    glm::mat4 modelMatrix(1.0f);  // Initialize as identity matrix
+    std::shared_ptr<Material> grassSideMat = std::make_shared<Material>(Material(shader));
+    grassSideMat->SetTexture(grassSideTex);
+    grassSideMat->SetBlend(1.0f);
+    
+    //modelMatrix = glm::rotate(modelMatrix, glm::radians(45.0f), glm::vec3(
+    //    1.0f,
+    //    0.0f,
+    //    0.0f
+    //));
+    
+    std::vector<Mesh> cubes = {};
+    for (int i = -2; i < 3; i++) {
+        float x = (float)i * 2.0;
+        glm::mat4 modelMatrix(1.0f);
+        modelMatrix = glm::scale(modelMatrix, glm::vec3(0.5f, 0.5f, 0.5f));
+        modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, -5.0f));
+        modelMatrix = glm::translate(modelMatrix, glm::vec3(x, 0.0f, 0.0f));
+        Mesh testBlock(
+            triangleModel.Vertices,
+            triangleModel.Indices,
+            triangleModel.Colors,
+            triangleModel.TextureCoords,
+            modelMatrix,
+            activeCamera,
+            grassSideMat
+        );
+        cubes.push_back(testBlock);
+    }
 
-    // Apply scaling transformation to make the cube 5x5x5
-    // does this need to be a vec4?
-    //modelMatrix = glm::scale(modelMatrix, glm::vec3(5.0f, 5.0f, 5.0f));
-
-    // Apply translation to move the cube further back into the camera's view
-    //modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, -5.0f));
-
-    Mesh testBlock(
-        triangleModel.Vertices,
-        triangleModel.Indices,
-        triangleModel.Colors,
-        triangleModel.TextureCoords,
-        modelMatrix,
-        activeCamera,
-        &grassSideMat
-    );
+    
 
     Renderer renderer = Renderer();
 
@@ -221,8 +228,10 @@ int main() {
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //renderer.camera = activeCamera;
-        renderer.Draw(testBlock);
+        for (auto& curBlock : cubes)
+        {
+            renderer.Draw(curBlock);
+        }
 
         // Swap buffers and poll events
         glfwSwapBuffers(Window);

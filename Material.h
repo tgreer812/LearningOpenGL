@@ -9,7 +9,7 @@ class Material
 {
 public:
     Material() : m_blendFactor(1.0f), m_useTexture(false), m_vertexColor(1.0f, 1.0f, 1.0f) {};
-    Material(Shader &shader);
+    Material(std::shared_ptr<Shader> shader);
 
     Material(const Material&) = delete;              // Delete copy constructor
     Material& operator=(const Material&) = delete;   // Delete copy assignment operator
@@ -51,10 +51,10 @@ public:
     void SetTexture(Texture2D texture);
     void SetBlend(float blendAmount);
     //void SetTextureCoords(std::vector<float> texCoords);
-    void SetShader(Shader shader) { this->m_shader = std::move(shader); }
+    void SetShader(std::shared_ptr<Shader> shader) { this->m_shader = shader; }
     //std::vector<float> GetTextureCoords();
 
-    Shader m_shader;
+    std::shared_ptr<Shader> m_shader;
 
     void Use();
 
