@@ -1,7 +1,7 @@
 #pragma once
+#include "glad/glad.h"
 #include <string>
 #include <unordered_map>
-#include "glad/glad.h"
 #include <glm/glm.hpp>  // For matrix and vector types
 #include <glm/ext.hpp>
 #include <memory>

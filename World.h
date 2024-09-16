@@ -1,9 +1,13 @@
 #pragma once
+
+#include "glad/glad.h"
 #include "Camera.h"
 #include "Event.h"
 #include "MouseEvent.h"
 #include "KeyEvent.h"
+#include "Renderer.h"
 #include <memory>
+
 
 class World {
 public:
@@ -12,6 +16,8 @@ public:
 
     // Initialize the world and register event handlers
     void init();
+
+    void initTerrain();
 
     // Update the world (if needed)
     void Update(float deltaTime);
@@ -33,6 +39,12 @@ private:
 
     // Camera
     Camera camera;
+
+    // Renderer
+    Renderer m_renderer;
+
+    // drawable entities
+    std::vector<std::shared_ptr<Drawable>> m_entities;
 
     // Event handling methods
     void onKeyEvent(std::shared_ptr<KeyEvent> e);

@@ -1,5 +1,8 @@
-#include "World.h"
 #include <iostream>
+
+#include "glm/glm.hpp"
+#include "World.h"
+#include "Block.h"
 
 // Instantiate the singleton instance
 World& World::GetInstance() {
@@ -30,6 +33,23 @@ void World::init() {
             onMouseMovedEvent(mouseMovedEvent);
         }
         });
+
+    this->m_entities = {};
+
+    this->initTerrain();
+
+}
+
+void World::initTerrain() {
+    // for now hardcode terrain as default blocks
+    for (int x = -10; x <= 10; x++) {
+        for (int z = -10; z <= 10; z++) {
+            this->m_entities.push_back(
+                std::make_shared<Block>(glm::vec3((float)x, 0.0f, (float)z))
+            );
+            std::cout << x << " " << z << std::endl;
+        }
+    }
 }
 
 void World::Update(float deltaTime) {
@@ -40,6 +60,9 @@ void World::Update(float deltaTime) {
 void World::Draw() {
     // Render the world
     // Use camera's view and projection matrices as needed
+    for (auto& entity : this->m_entities) {
+        this->m_renderer.Draw(entity);
+    }
 }
 
 Camera& World::GetCamera() {
