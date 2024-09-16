@@ -111,6 +111,9 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Source Files\Engine\Render</Filter>
     </ClCompile>
+    <ClCompile Include="GrassBlock.cpp">
+      <Filter>Source Files\Engine\Models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\VertexShader.glsl">
@@ -186,6 +189,9 @@
     </ClInclude>
     <ClInclude Include="VertexArray.h">
       <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="GrassBlock.h">
+      <Filter>Header Files\Models</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

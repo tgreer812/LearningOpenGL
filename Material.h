@@ -58,7 +58,7 @@ public:
 
     void Use();
 
-private:
+protected:
     bool m_useTexture;
     
     glm::vec3 m_vertexColor;

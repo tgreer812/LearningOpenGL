@@ -11,8 +11,8 @@ Block::Block(glm::vec3 pos) {
 
     // Compute the model matrix
     glm::mat4 modelMatrix(1.0f);
-    glm::scale(modelMatrix, glm::vec3(0.5f, 0.5f, 0.5f));
-    glm::translate(modelMatrix, this->position);
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(0.5f, 0.5f, 0.5f));
+    modelMatrix = glm::translate(modelMatrix, this->position);
 
     m_model = std::make_shared<SimpleModel>(cubeModelFile);
     std::shared_ptr<Shader> shader = std::make_shared<Shader>(
