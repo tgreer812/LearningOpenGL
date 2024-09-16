@@ -2,6 +2,8 @@
 
 #include "Event.h"
 
+EventDispatcher GlobalEventDispatcher;
+
 void EventDispatcher::AddListener(const std::string& eventType, EventCallback callback) {
     listeners[eventType].push_back(callback);
 }

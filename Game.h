@@ -17,6 +17,8 @@ public:
     // Start the game loop
     void start();
 
+    
+
 private:
     // Window dimensions and title
     int windowWidth;
@@ -28,10 +30,7 @@ private:
 
     // Timing variables
     float deltaTime;
-    float lastFrameTime;
-
-    // Event dispatcher
-    EventDispatcher eventDispatcher;
+    float lastFrameTime;    
 
     // Wireframe mode flag
     bool wireframe;

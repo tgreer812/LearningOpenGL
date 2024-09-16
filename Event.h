@@ -6,6 +6,8 @@
 #include <vector>
 #include <memory>
 
+
+
 // Base Event class
 class Event : public std::enable_shared_from_this<Event> {
 public:
@@ -29,3 +31,4 @@ private:
     std::unordered_map<std::string, std::vector<EventCallback>> listeners;
 };
 
+extern EventDispatcher GlobalEventDispatcher;

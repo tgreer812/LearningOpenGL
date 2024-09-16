@@ -4,6 +4,7 @@
 #include "World.h"
 #include "glad/glad.h"
 #include <iostream>
+#include "Event.h"
 
 Game::Game(int windowWidth, int windowHeight, const char* title)
     : windowWidth(windowWidth),
@@ -63,7 +64,7 @@ void Game::init() {
     glfwSetCursorPosCallback(window, handleMouseEvent);
 
     // Initialize the world and pass the event dispatcher
-    World::GetInstance().init(&eventDispatcher);
+    World::GetInstance().init();
 }
 
 void Game::start() {
@@ -106,7 +107,7 @@ void Game::handleKeyEvent(GLFWwindow* window, int key, int scancode, int action,
 
     // Create a KeyEvent and dispatch it
     auto keyEvent = std::make_shared<KeyEvent>(key, scancode, keyAction, mods);
-    game->eventDispatcher.Dispatch(keyEvent);
+    GlobalEventDispatcher.Dispatch(keyEvent);
 
     // Handle wireframe toggle within the Game class
     if (keyEvent->action == KeyAction::Release && keyEvent->key == GLFW_KEY_X) {
@@ -137,7 +138,7 @@ void Game::handleMouseEvent(GLFWwindow* window, double xpos, double ypos) {
     // Create a MouseMovedEvent and dispatch it
     auto mouseMovedEvent = std::make_shared<MouseMovedEvent>(
         static_cast<int>(xpos), static_cast<int>(ypos), deltaX, deltaY);
-    game->eventDispatcher.Dispatch(mouseMovedEvent);
+    GlobalEventDispatcher.Dispatch(mouseMovedEvent);
 }
 
 void Game::toggleWireframe() {

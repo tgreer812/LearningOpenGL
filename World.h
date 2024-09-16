@@ -11,7 +11,7 @@ public:
     static World& GetInstance();
 
     // Initialize the world and register event handlers
-    void init(EventDispatcher* dispatcher);
+    void init();
 
     // Update the world (if needed)
     void Update(float deltaTime);

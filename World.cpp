@@ -15,16 +15,16 @@ World::World() : deltaTime(0.0f) {
 World::~World() {
 }
 
-void World::init(EventDispatcher* dispatcher) {
+void World::init() {
     // Register event handlers
-    dispatcher->AddListener("KeyEvent", [this](std::shared_ptr<Event> e) {
+    GlobalEventDispatcher.AddListener("KeyEvent", [this](std::shared_ptr<Event> e) {
         auto keyEvent = std::dynamic_pointer_cast<KeyEvent>(e);
         if (keyEvent) {
             onKeyEvent(keyEvent);
         }
         });
 
-    dispatcher->AddListener("MouseMovedEvent", [this](std::shared_ptr<Event> e) {
+    GlobalEventDispatcher.AddListener("MouseMovedEvent", [this](std::shared_ptr<Event> e) {
         auto mouseMovedEvent = std::dynamic_pointer_cast<MouseMovedEvent>(e);
         if (mouseMovedEvent) {
             onMouseMovedEvent(mouseMovedEvent);
