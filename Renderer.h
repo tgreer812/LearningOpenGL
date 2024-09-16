@@ -5,6 +5,7 @@
 #include "glm/glm.hpp"
 #include "Utils.h"
 #include "Camera.h"
+#include "Drawable.h"
 
 class Renderer
 {
@@ -18,10 +19,11 @@ public:
 	// and setting the uniforms to the user provided values
 	// and then this method can just call that
 	// for now though just going to do this since we only have one shader
-	void Draw(Mesh &mesh) {
+	void Draw(std::shared_ptr<Drawable> entity) {
 		// Set camera uniforms
 
-		unsigned int vaSize = mesh.Bind();
+		entity->Bind();
+		unsigned int vaSize = entity->GetSize();
 
 		// Bind the vertex array
 		GL_CALL(glDrawElements(
