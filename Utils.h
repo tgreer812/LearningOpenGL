@@ -1,11 +1,10 @@
 #pragma once
-
+#include "glad/glad.h"
 #include <string>
 #include <fstream>
 #include <iostream>
 #include <glm/glm.hpp>
 #include <vector>
-#include "glad/glad.h"
 
 #define GL_CALL(x) {                                                 \
     Utils::ClearGLErrors();                                          \
