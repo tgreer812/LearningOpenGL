@@ -57,7 +57,7 @@ void Camera::Move(glm::vec3 translation, float deltaTime) {
 	// Update the LookAt matrix
 	this->m_lookAt = glm::lookAt(this->m_position, this->m_targetPoint, this->m_cameraUp);
 
-	std::cout << "Camera position: " << this->m_position.x << ", " << this->m_position.y << ", " << this->m_position.z << std::endl;
+	//std::cout << "Camera position: " << this->m_position.x << ", " << this->m_position.y << ", " << this->m_position.z << std::endl;
 }
 
 
@@ -74,7 +74,7 @@ void Camera::Rotate(float xoffset, float yoffset) {
 	// Update yaw
 	this->m_yaw += glm::mod(yawChange, 360.0f);
 
-	cout << "Yaw: " << m_yaw << "Pitch: " << m_pitch << endl;
+	//cout << "Yaw: " << m_yaw << "Pitch: " << m_pitch << endl;
 
 	// Calculate the new direction using the current yaw and pitch (relative to the current direction)
 	glm::vec3 direction;

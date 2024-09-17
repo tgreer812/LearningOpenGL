@@ -114,6 +114,15 @@
     <ClCompile Include="GrassBlock.cpp">
       <Filter>Source Files\Engine\Models</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderManager.cpp">
+      <Filter>Source Files\Engine\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelManager.cpp">
+      <Filter>Source Files\Engine\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelData.cpp">
+      <Filter>Source Files\Engine\Models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\VertexShader.glsl">
@@ -191,6 +200,15 @@
       <Filter>Header Files\Render</Filter>
     </ClInclude>
     <ClInclude Include="GrassBlock.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelData.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelManager.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
   </ItemGroup>

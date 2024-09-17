@@ -163,9 +163,12 @@
     <ClCompile Include="KeyEvent.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="ModelData.cpp" />
+    <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="MouseEvent.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="SimpleModel.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="Utils.cpp" />
@@ -190,11 +193,14 @@
     <ClInclude Include="KeyEvent.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="ModelData.h" />
+    <ClInclude Include="ModelManager.h" />
     <ClInclude Include="MouseEvent.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Libraries\include\stb_image\stb_image.h" />
+    <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="SimpleModel.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="Utils.h" />

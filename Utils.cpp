@@ -98,9 +98,9 @@ namespace Utils {
     {
         std::vector<float> interleavedBuffer;
 
-        std::cout << "Number of positions: " << vertexPositions.size() / 3 << std::endl;
+        /*std::cout << "Number of positions: " << vertexPositions.size() / 3 << std::endl;
         std::cout << "Number of colors: " << vertexColors.size() / 3 << std::endl;
-        std::cout << "Number of texture coordinates: " << textureCoords.size() / 2 << std::endl;
+        std::cout << "Number of texture coordinates: " << textureCoords.size() / 2 << std::endl;*/
 
 
         // Ensure all vectors are the same length (in terms of number of vertices)

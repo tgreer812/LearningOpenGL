@@ -43,12 +43,12 @@ void World::init() {
 void World::initTerrain() {
     //this->m_entities.push_back(std::make_shared<GrassBlock>(glm::vec3(0.0f, 0.0f, 0.0f)));
     // for now hardcode terrain as default blocks
-    for (int x = -10; x <= 10; x++) {
-        for (int z = -10; z <= 10; z++) {
+    for (int x = -20; x <= 20; x++) {
+        for (int z = -20; z <= 20; z++) {
             this->m_entities.push_back(
                 std::make_shared<GrassBlock>(glm::vec3((float)x*2, 0.0f, (float)z*2))
             );
-            std::cout << x << " " << z << std::endl;
+            //std::cout << x << " " << z << std::endl;
         }
     }
 }

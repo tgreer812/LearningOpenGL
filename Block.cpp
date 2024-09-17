@@ -2,6 +2,7 @@
 #include "Block.h"
 #include "SimpleModel.h"
 #include "Mesh.h"
+#include "ShaderManager.h"
 
 
 Block::Block() : Block(glm::vec3(0.0f, 0.0f, 0.0f)) {}
@@ -15,16 +16,16 @@ Block::Block(glm::vec3 pos) {
     modelMatrix = glm::translate(modelMatrix, this->position);
 
     m_model = std::make_shared<SimpleModel>(cubeModelFile);
-    std::shared_ptr<Shader> shader = std::make_shared<Shader>(
-        this->vertexShader,
-        this->fragmentShader
+    std::shared_ptr<Shader> shader = ShaderManager::Instance().GetShader(
+        vertexShader, 
+        fragmentShader
     );
     m_material = std::make_shared<Material>(shader);
     m_mesh = std::make_shared<Mesh>(
-        m_model->Vertices,
-        m_model->Indices,
-        m_model->Colors,
-        m_model->TextureCoords,
+        m_model->GetVertices(),
+        m_model->GetIndices(),
+        m_model->GetColors(),
+        m_model->GetTextureCoords(),
         modelMatrix,
         m_material
     );
