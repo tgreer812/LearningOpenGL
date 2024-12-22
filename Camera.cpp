@@ -7,7 +7,7 @@ using namespace std;
 // TODO: Rework this such that 'getters' do not do a calculation and modify the internal state of the camera
 // and thus we can mark them as const
 
-Camera::Camera() : Camera(glm::vec3(0.0f, 0.0f, 3.0f)) {}
+Camera::Camera() : Camera(glm::vec3(0.0f, 10.0f, 3.0f)) {}
 
 Camera::Camera(glm::vec3 position)
 {
